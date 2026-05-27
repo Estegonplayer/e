@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Semáforo do Silêncio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0B0D;
+    --surface: #13151A;
+    --surface2: #1A1D24;
+    --border: #2A2D35;
+    --amber: #F5A623;
+    --amber-dim: #7A5312;
+    --green: #00D68F;
+    --green-dim: #00512A;
+    --red: #FF3D57;
+    --red-dim: #7A0014;
+    --blue: #4D9EFF;
+    --text: #F0F2F5;
+    --text2: #8A8F9E;
+    --text3: #555A6B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* SCREENS */
+  .screen { display: none; flex-direction: column; width: 100%; max-width: 420px; min-height: 100dvh; padding: 0 24px 40px; }
+  .screen.active { display: flex; }
+
+  /* HEADER */
+  .header { padding: 56px 0 32px; }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 6px 14px 6px 10px;
+    font-size: 12px; color: var(--text2); letter-spacing: 0.02em;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text3); }
+  .dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .dot.amber { background: var(--amber); }
+  .dot.red { background: var(--red); }
+  h1 { font-size: 28px; font-weight: 600; margin-top: 20px; line-height: 1.2; }
+  .subtitle { font-size: 14px; color: var(--text2); margin-top: 8px; line-height: 1.6; }
+
+  /* BTN */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px;
+    border: none; border-radius: 12px;
+    font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.98); opacity: 0.85; }
+  .btn-primary { background: var(--amber); color: #0A0B0D; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-danger { background: var(--red-dim); color: var(--red); border: 1px solid #3A0010; }
+  .btn-ghost { background: transparent; color: var(--text2); font-size: 13px; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* DIVIDER */
+  .divider { width: 100%; height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; margin-top: 16px;
+  }
+  .info-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .info-row + .info-row { border-top: 1px solid var(--border); }
+  .info-icon { font-size: 18px; width: 20px; text-align: center; flex-shrink: 0; }
+  .info-label { font-size: 12px; color: var(--text2); }
+  .info-val { font-size: 14px; font-weight: 500; margin-top: 2px; }
+
+  /* PIN PAD */
+  .pin-display {
+    display: flex; justify-content: center; gap: 12px;
+    margin: 32px 0;
+  }
+  .pin-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--border); transition: background 0.15s, transform 0.1s;
+  }
+  .pin-dot.filled { background: var(--amber); transform: scale(1.15); }
+  .pin-pad {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-top: 8px;
+  }
+  .pin-key {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px; text-align: center;
+    cursor: pointer; font-size: 20px; font-family: 'JetBrains Mono', monospace;
+    font-weight: 500; transition: background 0.1s, transform 0.1s;
+  }
+  .pin-key:active { background: var(--surface2); transform: scale(0.94); }
+  .pin-key.del { font-size: 18px; color: var(--text2); }
+  .pin-key.empty { background: transparent; border-color: transparent; cursor: default; }
+
+  /* STATUS MSG */
+  .status-msg {
+    text-align: center; font-size: 13px; min-height: 20px;
+    padding: 8px 0; transition: color 0.2s;
+  }
+  .status-msg.error { color: var(--red); }
+  .status-msg.ok { color: var(--green); }
+  .status-msg.muted { color: var(--text2); }
+
+  /* SECTION CARD */
+  .section-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px; margin-bottom: 12px;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
+  }
+
+  /* SLIDER */
+  .slider-row { display: flex; flex-direction: column; gap: 10px; }
+  .slider-header { display: flex; justify-content: space-between; align-items: center; }
+  .slider-name { font-size: 14px; color: var(--text2); }
+  .slider-val { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500; }
+  .slider-val.amber { color: var(--amber); }
+  .slider-val.red { color: var(--red); }
+  input[type=range] {
+    -webkit-appearance: none; width: 100%; height: 4px;
+    border-radius: 4px; outline: none; cursor: pointer;
+  }
+  input[type=range].amber { background: linear-gradient(to right, var(--amber) 0%, var(--amber) var(--pct, 50%), var(--border) var(--pct, 50%)); }
+  input[type=range].red-track { background: linear-gradient(to right, var(--red) 0%, var(--red) var(--pct, 70%), var(--border) var(--pct, 70%)); }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff;
+    box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--border);
+  }
+
+  /* TOGGLE */
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; }
+  .toggle-text h3 { font-size: 14px; font-weight: 500; }
+  .toggle-text p { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
+  .toggle {
+    position: relative; width: 44px; height: 26px; flex-shrink: 0;
+    background: var(--border); border-radius: 999px;
+    cursor: pointer; transition: background 0.2s; margin-left: 16px;
+  }
+  .toggle.on { background: var(--green); }
+  .toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    transition: transform 0.2s;
+  }
+  .toggle.on::after { transform: translateX(18px); }
+
+  /* TEXT INPUT */
+  .field-label { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+  .text-input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    outline: none; transition: border-color 0.15s;
+  }
+  .text-input:focus { border-color: var(--amber); }
+  .text-input::placeholder { color: var(--text3); }
+
+  /* DEVICE CARD */
+  .device-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; display: flex;
+    align-items: center; gap: 14px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .device-card:active { background: var(--surface2); border-color: var(--amber); }
+  .device-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .device-name { font-size: 15px; font-weight: 500; }
+  .device-meta { font-size: 12px; color: var(--text2); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+  .rssi-bar { display: flex; gap: 2px; align-items: flex-end; margin-left: auto; }
+  .rssi-bar span {
+    width: 4px; border-radius: 2px; background: var(--border);
+    transition: background 0.3s;
+  }
+
+  /* SPINNER */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 20px; height: 20px; border: 2px solid var(--border);
+    border-top-color: var(--amber); border-radius: 50%;
+    animation: spin 0.7s linear infinite; flex-shrink: 0;
+  }
+
+  /* PING ANIM */
+  @keyframes ping {
+    0% { transform: scale(1); opacity: 0.6; }
+    80% { transform: scale(1.8); opacity: 0; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  .ping-wrap { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+  .ping-ring {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: var(--amber); opacity: 0;
+    animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;
+  }
+  .ping-core {
+    position: relative; width: 100%; height: 100%; border-radius: 50%;
+    background: var(--amber-dim); border: 1px solid var(--amber);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+  }
+
+  /* FOOTER */
+  .footer-hint { font-size: 12px; color: var(--text3); text-align: center; line-height: 1.7; margin-top: 16px; }
+
+  /* GAP UTILS */
+  .gap8 { gap: 8px; }
+  .gap12 { gap: 12px; }
+  .gap16 { gap: 16px; }
+  .mt8 { margin-top: 8px; }
+  .mt12 { margin-top: 12px; }
+  .mt16 { margin-top: 16px; }
+  .mt24 { margin-top: 24px; }
+
+  /* DASH NAV */
+  .dash-header { padding: 48px 0 8px; display: flex; flex-direction: column; gap: 4px; }
+  .dash-title { font-size: 20px; font-weight: 600; }
+  .dash-sub { font-size: 13px; color: var(--text2); }
+
+  /* ALERT */
+  .alert {
+    border-radius: 10px; padding: 12px 14px;
+    font-size: 13px; line-height: 1.5; margin-bottom: 12px;
+    border: 1px solid;
+  }
+  .alert-amber { background: #1A1200; border-color: var(--amber-dim); color: var(--amber); }
+  .alert-green { background: #001A0E; border-color: var(--green-dim); color: var(--green); }
+  .alert-red { background: #1A0008; border-color: var(--red-dim); color: var(--red); }
+  .alert-info { background: var(--surface); border-color: var(--border); color: var(--text2); }
+
+  /* COMPAT WARNING */
+  #compat-warn {
+    display: none; background: #1A0D00; border: 1px solid var(--amber-dim);
+    border-radius: 12px; padding: 20px; margin: 24px;
+    font-size: 14px; line-height: 1.6; color: var(--amber);
+    max-width: 420px;
+  }
+  .scroll { overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<div id="compat-warn">
+  ⚠️ <strong>Navegador não suportado</strong><br><br>
+  A Web Bluetooth API requer <strong>Google Chrome</strong> (desktop ou Android).<br><br>
+  Abra este arquivo no Chrome e certifique-se de estar acessando via <code>localhost</code> ou <code>https://</code>.<br><br>
+  <strong>Como servir localmente:</strong><br>
+  <code>python3 -m http.server 8080</code><br>
+  Depois acesse <code>http://localhost:8080</code>
+</div>
+
+<!-- TELA 1: SCAN -->
+<div class="screen active" id="screen-scan">
+  <div class="header">
+    <div class="header-badge">
+      <span class="dot" id="ble-indicator"></span>
+      <span id="ble-status-text">Pronto para conectar</span>
+    </div>
+    <h1>Semáforo<br>do Silêncio</h1>
+    <p class="subtitle">Conecte ao dispositivo ESP32 via Bluetooth para configurar os limites de ruído.</p>
+  </div>
+
+  <div id="scan-idle">
+    <div style="display:flex; flex-direction:column; align-items:center; padding: 32px 0;">
+      <div class="ping-wrap">
+        <div class="ping-ring" id="ping-ring" style="animation:none"></div>
+        <div class="ping-core">📡</div>
+      </div>
+      <p style="margin-top:20px; font-size:14px; color:var(--text2);">Nenhum dispositivo encontrado</p>
+    </div>
+  </div>
+
+  <div id="scan-result" style="display:none; flex-direction:column; gap:10px; margin-bottom:16px;"></div>
+
+  <div id="scan-loading" style="display:none; align-items:center; gap:12px; padding: 16px 0;">
+    <div class="spinner"></div>
+    <span style="font-size:14px; color:var(--text2);" id="scan-loading-text">Procurando dispositivos...</span>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:10px; margin-top: auto; padding-top: 24px;">
+    <button class="btn btn-primary" id="btn-scan" onclick="startScan()">
+      <span>🔍</span> Procurar Dispositivos
+    </button>
+    <button class="btn btn-ghost" onclick="showManual()">Conectar manualmente</button>
+  </div>
+
+  <div class="footer-hint" id="scan-footer">
+    Ative o Semáforo: toque <strong>3×</strong> no módulo Touch para habilitar o Bluetooth.<br>
+    O dispositivo fica visível por 5 minutos.
+  </div>
+</div>
+
+<!-- TELA 2: AUTH -->
+<div class="screen" id="screen-auth">
+  <div style="padding-top: 48px;">
+    <button class="btn btn-ghost" style="width:auto; padding:0;" onclick="disconnect()">← Voltar</button>
+  </div>
+
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+    <div style="text-align:center; margin-bottom:8px;">
+      <div style="font-size:32px; margin-bottom:12px;">🔒</div>
+      <h2 style="font-size:20px; font-weight:600;">Autenticação</h2>
+      <p class="subtitle" id="auth-device-name" style="margin-top:6px;"></p>
+    </div>
+
+    <div class="pin-display" id="pin-display">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+
+    <p class="status-msg muted" id="auth-status">Digite o PIN de acesso</p>
+
+    <div class="pin-pad" id="pin-pad">
+      <div class="pin-key" onclick="pinKey('1')">1</div>
+      <div class="pin-key" onclick="pinKey('2')">2</div>
+      <div class="pin-key" onclick="pinKey('3')">3</div>
+      <div class="pin-key" onclick="pinKey('4')">4</div>
+      <div class="pin-key" onclick="pinKey('5')">5</div>
+      <div class="pin-key" onclick="pinKey('6')">6</div>
+      <div class="pin-key" onclick="pinKey('7')">7</div>
+      <div class="pin-key" onclick="pinKey('8')">8</div>
+      <div class="pin-key" onclick="pinKey('9')">9</div>
+      <div class="pin-key empty"></div>
+      <div class="pin-key" onclick="pinKey('0')">0</div>
+      <div class="pin-key del" onclick="pinDel()">⌫</div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 3: DASHBOARD -->
+<div class="screen scroll" id="screen-dash">
+  <div class="dash-header">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div class="header-badge" style="margin-bottom:8px;">
+          <span class="dot green"></span>
+          <span>Conectado</span>
+        </div>
+        <div class="dash-title" id="dash-device-name">—</div>
+        <div class="dash-sub">Painel de Configuração</div>
+      </div>
+      <div style="font-size:32px;">🚦</div>
+    </div>
+  </div>
+
+  <div id="dash-feedback" style="margin-top:12px;"></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; gap:0; margin-top:16px;">
+
+    <!-- LIMITES -->
+    <div class="section-card">
+      <div class="section-label">Limites de Ruído</div>
+      <div class="slider-row" style="margin-bottom:20px;">
+        <div class="slider-header">
+          <span class="slider-name">🟡 Atenção (amarelo)</span>
+          <span class="slider-val amber mono" id="val-amarelo">150</span>
+        </div>
+        <input type="range" class="amber" id="slider-amarelo" min="50" max="490" value="150" step="5"
+          oninput="updateSlider('amarelo')">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header">
+          <span class="slider-name">🔴 Alerta (vermelho)</span>
+          <span class="slider-val red mono" id="val-vermelho">350</span>
+        </div>
+        <input type="range" class="red-track" id="slider-vermelho" min="60" max="500" value="350" step="5"
+          oninput="updateSlider('vermelho')">
+      </div>
+      <button class="btn btn-primary mt16" onclick="sendLimites()">Aplicar Limites</button>
+    </div>
+
+    <!-- CONFIRMAÇÃO -->
+    <div class="section-card">
+      <div class="section-label">Anti-Trapaça</div>
+      <div class="toggle-row">
+        <div class="toggle-text">
+          <h3>Confirmação obrigatória</h3>
+          <p>Exige toque manual para limpar o alerta vermelho. Impede que o usuário apenas aguarde o timeout.</p>
+        </div>
+        <div class="toggle" id="toggle-conf" onclick="toggleConf()"></div>
+      </div>
+    </div>
+
+    <!-- NOME BLE -->
+    <div class="section-card">
+      <div class="section-label">Identificação do Dispositivo</div>
+      <div class="field-label">Nome BLE</div>
+      <input type="text" class="text-input" id="input-nome" placeholder="Semaforo_Mesa_01" maxlength="32">
+      <p style="font-size:11px; color:var(--text3); margin-top:8px; line-height:1.5;">
+        A alteração de nome só é aplicada no próximo boot da ESP32.
+      </p>
+      <button class="btn btn-secondary mt12" onclick="sendNome()">Alterar Nome</button>
+    </div>
+
+    <!-- SENHA -->
+    <div class="section-card">
+      <div class="section-label">Segurança</div>
+      <div class="field-label">Nova senha (mín. 4 dígitos)</div>
+      <input type="password" class="text-input mono" id="input-senha"
+        placeholder="••••" maxlength="16" inputmode="numeric">
+      <button class="btn btn-secondary mt12" onclick="sendSenha()">Alterar Senha</button>
+    </div>
+
+    <!-- DESCONECTAR -->
+    <div class="section-card" style="margin-bottom:0;">
+      <button class="btn btn-danger" onclick="disconnect()">
+        🔌 Desconectar
+      </button>
+    </div>
+  </div>
+
+  <div class="footer-hint" style="margin-top:20px;">
+    Os comandos são enviados via UART-over-BLE.<br>
+    Sem feedback do firmware — erros de senha são ignorados silenciosamente.
+  </div>
+</div>
+
+<script>
+const SERVICE_UUID   = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+const CHAR_UUID      = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+
+let device = null;
+let characteristic = null;
+let pinBuffer = '';
+let confState = true;
+
+// ─── COMPAT CHECK ─────────────────────────────────────────────────────
+if (!navigator.bluetooth) {
+  document.getElementById('compat-warn').style.display = 'block';
+  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+}
+
+// ─── SCREEN NAVIGATION ───────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── SCAN ─────────────────────────────────────────────────────────────
+async function startScan() {
+  const btn = document.getElementById('btn-scan');
+  const loading = document.getElementById('scan-loading');
+  const idle = document.getElementById('scan-idle');
+  const results = document.getElementById('scan-result');
+  const ring = document.getElementById('ping-ring');
+
+  ring.style.animation = 'ping 2s cubic-bezier(0,0,0.2,1) infinite';
+  setBleStatus('Buscando...', 'amber');
+  btn.disabled = true;
+  loading.style.display = 'flex';
+  idle.style.display = 'none';
+  results.style.display = 'none';
+  results.innerHTML = '';
+
+  try {
+    device = await navigator.bluetooth.requestDevice({
+      filters: [{ services: [SERVICE_UUID] }],
+      optionalServices: [SERVICE_UUID]
+    });
+
+    loading.style.display = 'none';
+    ring.style.animation = 'none';
+    setBleStatus('Dispositivo encontrado', 'green');
+    renderDeviceCard(device);
+  } catch (e) {
+    loading.style.display = 'none';
+    ring.style.animation = 'none';
+    if (e.name !== 'NotFoundError') {
+      setBleStatus('Erro: ' + e.message, 'red');
+    } else {
+      setBleStatus('Busca cancelada', '');
+    }
+    idle.style.display = 'block';
+    btn.disabled = false;
+    device = null;
+  }
+}
+
+function renderDeviceCard(dev) {
+  const results = document.getElementById('scan-result');
+  results.innerHTML = '';
+  results.style.display = 'flex';
+
+  const card = document.createElement('div');
+  card.className = 'device-card';
+  card.innerHTML = `
+    <div class="device-icon">📡</div>
+    <div>
+      <div class="device-name">${dev.name || 'Semáforo'}</div>
+      <div class="device-meta mono">${dev.id ? dev.id.substring(0,20) + '…' : 'BLE'}</div>
+    </div>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span style="font-size:12px; color:var(--green);">Encontrado</span>
+      <span style="font-size:16px;">›</span>
+    </div>`;
+  card.onclick = () => connectDevice();
+  results.appendChild(card);
+
+  document.getElementById('btn-scan').disabled = false;
+  document.getElementById('btn-scan').textContent = '🔄 Buscar novamente';
+}
+
+async function connectDevice() {
+  if (!device) return;
+  setBleStatus('Conectando...', 'amber');
+
+  const loading = document.getElementById('scan-loading');
+  document.getElementById('scan-loading-text').textContent = 'Estabelecendo conexão GATT...';
+  document.getElementById('scan-result').style.display = 'none';
+  loading.style.display = 'flex';
+
+  try {
+    const server = await device.gatt.connect();
+    const service = await server.getPrimaryService(SERVICE_UUID);
+    characteristic = await service.getCharacteristic(CHAR_UUID);
+
+    device.addEventListener('gattserverdisconnected', onDisconnected);
+
+    loading.style.display = 'none';
+    document.getElementById('auth-device-name').textContent = device.name || 'Semáforo';
+    showScreen('auth');
+    resetPin();
+  } catch (e) {
+    loading.style.display = 'none';
+    setBleStatus('Falha na conexão: ' + e.message, 'red');
+    document.getElementById('btn-scan').disabled = false;
+  }
+}
+
+function showManual() {
+  // Triggers the browser's device picker without service filter
+  navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: [SERVICE_UUID] })
+    .then(dev => { device = dev; renderDeviceCard(dev); })
+    .catch(() => {});
+}
+
+// ─── PIN ──────────────────────────────────────────────────────────────
+function resetPin() {
+  pinBuffer = '';
+  updatePinUI();
+  setAuthStatus('Digite o PIN de acesso', 'muted');
+}
+
+function pinKey(k) {
+  if (pinBuffer.length >= 8) return;
+  pinBuffer += k;
+  updatePinUI();
+  if (pinBuffer.length >= 4) {
+    setTimeout(sendLogin, 150);
+  }
+}
+
+function pinDel() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinUI();
+}
+
+function updatePinUI() {
+  const len = Math.min(pinBuffer.length, 8);
+  const dots = document.querySelectorAll('.pin-dot');
+  dots.forEach((d, i) => d.classList.toggle('filled', i < len));
+}
+
+async function sendLogin() {
+  if (!characteristic) return;
+  setAuthStatus('Verificando...', 'muted');
+  disablePinPad(true);
+
+  try {
+    await writeCommand('LOGIN:' + pinBuffer);
+    setAuthStatus('Conectado ✓', 'ok');
+    setTimeout(() => {
+      document.getElementById('dash-device-name').textContent = device.name || 'Semáforo';
+      showScreen('dash');
+    }, 500);
+  } catch (e) {
+    setAuthStatus('Erro ao enviar PIN. Tente novamente.', 'error');
+    setTimeout(() => { resetPin(); disablePinPad(false); }, 1500);
+  }
+}
+
+function disablePinPad(on) {
+  document.querySelectorAll('.pin-key').forEach(k => {
+    k.style.opacity = on ? '0.4' : '1';
+    k.style.pointerEvents = on ? 'none' : 'auto';
+  });
+}
+
+function setAuthStatus(msg, type) {
+  const el = document.getElementById('auth-status');
+  el.textContent = msg;
+  el.className = 'status-msg ' + type;
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────
+function updateSlider(name) {
+  const slider = document.getElementById('slider-' + name);
+  const val = parseInt(slider.value);
+  document.getElementById('val-' + name).textContent = val;
+
+  const min = parseInt(slider.min), max = parseInt(slider.max);
+  const pct = ((val - min) / (max - min) * 100).toFixed(1) + '%';
+  slider.style.setProperty('--pct', pct);
+
+  // Enforce amarelo < vermelho - 10
+  if (name === 'amarelo') {
+    const rv = parseInt(document.getElementById('slider-vermelho').value);
+    if (val >= rv - 10) {
+      slider.value = rv - 10;
+      document.getElementById('val-' + name).textContent = rv - 10;
+    }
+  }
+  if (name === 'vermelho') {
+    const av = parseInt(document.getElementById('slider-amarelo').value);
+    if (val <= av + 10) {
+      slider.value = av + 10;
+      document.getElementById('val-' + name).textContent = av + 10;
+    }
+  }
+}
+
+async function sendLimites() {
+  const a = document.getElementById('slider-amarelo').value;
+  const v = document.getElementById('slider-vermelho').value;
+  await sendProtected('LIMITES:' + a + ',' + v, 'Limites atualizados: 🟡 ' + a + ' | 🔴 ' + v);
+}
+
+function toggleConf() {
+  confState = !confState;
+  const t = document.getElementById('toggle-conf');
+  t.classList.toggle('on', confState);
+  sendProtected('CONFIRMACAO:' + (confState ? 'LIGADO' : 'DESLIGADO'),
+    'Anti-trapaça ' + (confState ? 'ativado' : 'desativado'));
+}
+
+async function sendNome() {
+  const nome = document.getElementById('input-nome').value.trim();
+  if (!nome) { showFeedback('Digite um nome válido.', 'red'); return; }
+  await sendProtected('NOME:' + nome, 'Nome alterado. Aplica no próximo boot da ESP32.');
+}
+
+async function sendSenha() {
+  const s = document.getElementById('input-senha').value.trim();
+  if (s.length < 4) { showFeedback('Senha deve ter ao menos 4 dígitos.', 'red'); return; }
+  await sendProtected('ALTERARSENHA:' + s, 'Senha alterada com sucesso.');
+  document.getElementById('input-senha').value = '';
+}
+
+async function sendProtected(cmd, successMsg) {
+  try {
+    await writeCommand(cmd);
+    showFeedback(successMsg, 'green');
+  } catch (e) {
+    showFeedback('Erro ao enviar: ' + e.message, 'red');
+  }
+}
+
+function showFeedback(msg, type) {
+  const el = document.getElementById('dash-feedback');
+  const colors = { green: 'alert-green', red: 'alert-red', amber: 'alert-amber' };
+  el.innerHTML = `<div class="alert ${colors[type] || 'alert-info'}">${msg}</div>`;
+  setTimeout(() => { if (el.firstChild) el.innerHTML = ''; }, 4000);
+}
+
+// ─── BLE WRITE ────────────────────────────────────────────────────────
+async function writeCommand(cmd) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(cmd);
+  await characteristic.writeValue(data);
+}
+
+// ─── DISCONNECT ───────────────────────────────────────────────────────
+function onDisconnected() {
+  characteristic = null;
+  device = null;
+  setBleStatus('Desconectado', '');
+  resetScanScreen();
+  showScreen('scan');
+}
+
+function disconnect() {
+  if (device && device.gatt.connected) {
+    device.gatt.disconnect();
+  } else {
+    onDisconnected();
+  }
+}
+
+function resetScanScreen() {
+  document.getElementById('scan-result').style.display = 'none';
+  document.getElementById('scan-result').innerHTML = '';
+  document.getElementById('scan-idle').style.display = 'block';
+  document.getElementById('scan-loading').style.display = 'none';
+  document.getElementById('btn-scan').disabled = false;
+  document.getElementById('btn-scan').innerHTML = '<span>🔍</span> Procurar Dispositivos';
+  document.getElementById('ping-ring').style.animation = 'none';
+}
+
+// ─── STATUS INDICATOR ────────────────────────────────────────────────
+function setBleStatus(msg, color) {
+  document.getElementById('ble-status-text').textContent = msg;
+  const dot = document.getElementById('ble-indicator');
+  dot.className = 'dot' + (color ? ' ' + color : '');
+}
+
+// ─── INIT SLIDERS ────────────────────────────────────────────────────
+['amarelo', 'vermelho'].forEach(n => updateSlider(n));
+document.getElementById('toggle-conf').classList.toggle('on', confState);
+</script>
+</body>
+</html>
