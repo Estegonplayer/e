@@ -228,9 +228,10 @@
         try {
             statusText.textContent = "Buscando...";
             
-            // Filtra pelo UUID do serviço do seu Semáforo
+            // ATUALIZAÇÃO AQUI: Aceita todos os dispositivos, mas exige acesso ao nosso SERVICE_UUID
             bleDevice = await navigator.bluetooth.requestDevice({
-                filters: [{ services: [SERVICE_UUID] }]
+                acceptAllDevices: true,
+                optionalServices: [SERVICE_UUID]
             });
 
             bleDevice.addEventListener('gattserverdisconnected', onDisconnected);
@@ -243,12 +244,12 @@
             statusText.className = "status-badge connected";
             btnConnect.textContent = "Desconectar";
             
-            // Mostra o campo de Login primeiro (assim como o firmware exige)
+            // Mostra o campo de Login primeiro
             authSection.classList.remove('hidden');
 
         } catch (error) {
             console.error("Erro na conexão BLE:", error);
-            alert("Falha ao conectar. Verifique se o ESP32 está no modo de configuração (3 toques).");
+            alert("Falha ao conectar. Verifique se escolheu o dispositivo certo e se ele não está pareado no Windows/Android.");
             resetUI();
         }
     }
@@ -291,17 +292,12 @@
         }
     }
 
-    // Ações dos botões - Formatando os comandos para o MyCallbacks do ESP32
-    
+    // Ações dos botões
     btnLogin.addEventListener('click', async () => {
         const pass = document.getElementById('password').value;
         if(!pass) return alert("Digite a senha!");
         
         await sendCommand(`LOGIN:${pass}`);
-        
-        // Libera o painel principal. 
-        // Como o BLE do ESP32 não responde confirmação de login por texto nesse firmware,
-        // liberamos a UI aqui. Se a senha estiver errada, o ESP simplesmente ignorará os comandos seguintes.
         configPanel.classList.remove('hidden');
     });
 
