@@ -1,1 +1,338 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração - Semáforo de Mesa</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .status-badge {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .disconnected { color: #dc2626; background: #fee2e2; }
+        .connected { color: #16a34a; background: #dcfce7; }
+
+        .section {
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #4b5563;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="number"], input[type="password"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #4338ca;
+        }
+
+        button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Painel do Semáforo</h2>
+
+    <div class="status-container">
+        <span>Status: <span id="statusText" class="status-badge disconnected">Desconectado</span></span>
+        <button id="btnConnect" style="width: auto; padding: 6px 12px; font-size: 0.9rem;">Conectar</button>
+    </div>
+
+    <div id="authSection" class="section hidden">
+        <div class="section-title">Autenticação</div>
+        <div class="form-group">
+            <label for="password">Senha do Dispositivo</label>
+            <div class="row">
+                <input type="password" id="password" placeholder="Padrão: 1234">
+                <button id="btnLogin" style="width: auto;">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="configPanel" class="section hidden">
+        <div class="section-title">Configurações do Dispositivo</div>
+
+        <div class="row">
+            <div class="form-group">
+                <label for="limitAmarelo">Limite Amarelo</label>
+                <input type="number" id="limitAmarelo" value="2800">
+            </div>
+            <div class="form-group">
+                <label for="limitVermelho">Limite Vermelho</label>
+                <input type="number" id="limitVermelho" value="3000">
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="btnLimites">Atualizar Limites</button>
+        </div>
+
+        <div class="form-group section">
+            <label for="selectConf">Travar no Vermelho?</label>
+            <div class="row">
+                <select id="selectConf">
+                    <option value="LIGADO">Sim (Exige toque para resetar)</option>
+                    <option value="DESLIGADO">Não (Reseta sozinho)</option>
+                </select>
+                <button id="btnConf" style="width: auto;">Salvar</button>
+            </div>
+        </div>
+
+        <div class="form-group section">
+            <label for="deviceName">Nome do Dispositivo (Aplica no boot)</label>
+            <div class="row">
+                <input type="text" id="deviceName" placeholder="Ex: Semaforo_Mesa_Novo">
+                <button id="btnNome" style="width: auto;">Salvar</button>
+            </div>
+        </div>
+
+        <div class="form-group section">
+            <label for="newPassword">Nova Senha (Mínimo 4 caracteres)</label>
+            <div class="row">
+                <input type="password" id="newPassword" placeholder="Nova senha">
+                <button id="btnNovaSenha" style="width: auto;">Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Definições dos UUIDs idênticos ao firmware do ESP32
+    const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+    const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+
+    let bleDevice = null;
+    let bleCharacteristic = null;
+
+    // Elementos da Interface
+    const btnConnect = document.getElementById('btnConnect');
+    const statusText = document.getElementById('statusText');
+    const authSection = document.getElementById('authSection');
+    const configPanel = document.getElementById('configPanel');
+
+    // Elementos de Ação
+    const btnLogin = document.getElementById('btnLogin');
+    const btnLimites = document.getElementById('btnLimites');
+    const btnConf = document.getElementById('btnConf');
+    const btnNome = document.getElementById('btnNome');
+    const btnNovaSenha = document.getElementById('btnNovaSenha');
+
+    // Event Listener de Conexão
+    btnConnect.addEventListener('click', async () => {
+        if (bleDevice && bleDevice.gatt.connected) {
+            disconnectDevice();
+        } else {
+            await connectDevice();
+        }
+    });
+
+    async function connectDevice() {
+        try {
+            statusText.textContent = "Buscando...";
+            
+            // ATUALIZAÇÃO AQUI: Aceita todos os dispositivos, mas exige acesso ao nosso SERVICE_UUID
+            bleDevice = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true,
+                optionalServices: [SERVICE_UUID]
+            });
+
+            bleDevice.addEventListener('gattserverdisconnected', onDisconnected);
+
+            const server = await bleDevice.gatt.connect();
+            const service = await server.getPrimaryService(SERVICE_UUID);
+            bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+            statusText.textContent = "Conectado";
+            statusText.className = "status-badge connected";
+            btnConnect.textContent = "Desconectar";
+            
+            // Mostra o campo de Login primeiro
+            authSection.classList.remove('hidden');
+
+        } catch (error) {
+            console.error("Erro na conexão BLE:", error);
+            alert("Falha ao conectar. Verifique se escolheu o dispositivo certo e se ele não está pareado no Windows/Android.");
+            resetUI();
+        }
+    }
+
+    function disconnectDevice() {
+        if (bleDevice && bleDevice.gatt.connected) {
+            bleDevice.gatt.disconnect();
+        }
+    }
+
+    function onDisconnected() {
+        alert("Dispositivo Bluetooth desconectado.");
+        resetUI();
+    }
+
+    function resetUI() {
+        statusText.textContent = "Desconectado";
+        statusText.className = "status-badge disconnected";
+        btnConnect.textContent = "Conectar";
+        authSection.classList.add('hidden');
+        configPanel.classList.add('hidden');
+        bleDevice = null;
+        bleCharacteristic = null;
+    }
+
+    // Função auxiliar para enviar strings via BLE para o ESP32
+    async function sendCommand(command) {
+        if (!bleCharacteristic) {
+            alert("Dispositivo não conectado!");
+            return;
+        }
+        try {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(command);
+            await bleCharacteristic.writeValue(data);
+            console.log(`Comando enviado com sucesso: ${command}`);
+        } catch (error) {
+            console.error("Erro ao enviar comando:", error);
+            alert("Erro ao enviar dados para o semáforo.");
+        }
+    }
+
+    // Ações dos botões
+    btnLogin.addEventListener('click', async () => {
+        const pass = document.getElementById('password').value;
+        if(!pass) return alert("Digite a senha!");
+        
+        await sendCommand(`LOGIN:${pass}`);
+        configPanel.classList.remove('hidden');
+    });
+
+    btnLimites.addEventListener('click', async () => {
+        const amarelo = document.getElementById('limitAmarelo').value;
+        const vermelho = document.getElementById('limitVermelho').value;
+        if(!amarelo || !vermelho) return alert("Preencha ambos os limites!");
+        
+        await sendCommand(`LIMITES:${parseFloat(amarelo).toFixed(1)},${parseFloat(vermelho).toFixed(1)}`);
+        alert("Comando de limites enviado!");
+    });
+
+    btnConf.addEventListener('click', async () => {
+        const estado = document.getElementById('selectConf').value;
+        await sendCommand(`CONFIRMACAO:${estado}`);
+        alert("Configuração de travamento enviada!");
+    });
+
+    btnNome.addEventListener('click', async () => {
+        const novoNome = document.getElementById('deviceName').value;
+        if(!novoNome) return alert("Digite um nome válido!");
+        
+        await sendCommand(`NOME:${novoNome}`);
+        alert("Novo nome enviado! Será aplicado no próximo boot do Semáforo.");
+    });
+
+    btnNovaSenha.addEventListener('click', async () => {
+        const novaSenha = document.getElementById('newPassword').value;
+        if(novaSenha.length < 4) return alert("A senha precisa ter no mínimo 4 caracteres!");
+        
+        await sendCommand(`ALTERARSENHA:${novaSenha}`);
+        alert("Nova senha enviada com sucesso!");
+    });
+</script>
+
+</body>
+</html>
