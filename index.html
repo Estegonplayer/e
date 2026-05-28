@@ -385,8 +385,10 @@
     <div class="field">
       <label>Calibração Automática</label>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
-        Fale normalmente durante <strong style="color:var(--text)">10 segundos</strong>.
-        O dispositivo analisa o pico de voz e define os limites automaticamente.
+        Fale no volume normal de trabalho durante <strong style="color:var(--text)">10 segundos</strong>.
+        O painel captura o pico da sua voz e define o <span style="color:var(--red)">limite vermelho</span> em
+        <strong style="color:var(--text)">+10% acima desse pico</strong>, e o
+        <span style="color:var(--amber)">amarelo</span> em 80% do vermelho.
       </p>
       <button class="btn btn-cyan btn-full" id="btnAutoconfig" disabled>Iniciar Calibração Automática</button>
       <div class="autoconfig-bar-wrap hidden" id="autoconfigBarWrap">
@@ -480,9 +482,10 @@ const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 let bleDevice         = null;
 let bleCharacteristic = null;
 let isAuth            = false;
-let autoconfigActive  = false;
-let autoconfigTimer   = null;
+let autoconfigActive   = false;
+let autoconfigTimer    = null;
 let autoconfigProgress = 0;
+let autoconfigPeak     = 0;   // Pico máximo capturado pelo HTML durante a janela de 10s
 
 // Limites (populados do dispositivo após login)
 let currentAmarelo = 0;
@@ -715,16 +718,11 @@ function handleNotification(event) {
 
   // ── Dados de áudio ao vivo ──
   if (raw.startsWith('DATA:')) {
-    const parts = raw.substring(5).split(',');
-    const val   = parseFloat(parts[0]);
-    if (!isNaN(val)) pushChartValue(val);
-
-    // Se está em auto-config, processa countdown
-    if (autoconfigActive && parts[1]?.startsWith('CALIB:')) {
-      const sec = parseInt(parts[1].split(':')[1]);
-      const pct = ((10 - sec) / 10) * 100;
-      autoconfigBar.style.width = pct + '%';
-      autoconfigStatus.textContent = `⏱ Analisando... ${sec}s restantes`;
+    const val = parseFloat(raw.substring(5).split(',')[0]);
+    if (!isNaN(val)) {
+      pushChartValue(val);
+      // Tracking de pico client-side durante calibração (ignora CALIB: do firmware)
+      if (autoconfigActive && val > autoconfigPeak) autoconfigPeak = val;
     }
     return;
   }
@@ -771,48 +769,58 @@ function handleNotification(event) {
   if (raw === 'OK:CONFIRMACAO') { showToast('✓ Comportamento de travamento salvo!'); return; }
   if (raw === 'ERR:SENHA_CURTA') { showToast('Senha muito curta (mín. 4).', 'err'); return; }
 
-  // ── Auto-config: iniciado ──
-  if (raw.startsWith('AUTOCONFIG_START:')) {
-    return; // Já tratado pelo progressbar
-  }
-
-  // ── Auto-config: concluído ──
-  if (raw.startsWith('AUTOCONFIG_DONE:')) {
-    const [a, v]  = raw.substring(16).split(',');
-    const fA = parseFloat(a), fV = parseFloat(v);
-    document.getElementById('limitAmarelo').value = Math.round(fA);
-    document.getElementById('limitVermelho').value = Math.round(fV);
-    amareloLine  = fA;
-    vermelhoLine = fV;
-    currentAmarelo = fA;
-    currentVermelho = fV;
-    updateLimitTags();
-    stopAutoconfig(true);
-    showToast(`✓ Calibrado! Amarelo=${Math.round(fA)} | Vermelho=${Math.round(fV)}`);
-    return;
-  }
-
-  // ── Auto-config: falhou ──
-  if (raw === 'AUTOCONFIG_FAIL') {
-    stopAutoconfig(false);
-    showToast('Calibração falhou: sinal muito baixo.', 'err');
-    return;
-  }
+  // Firmware AUTOCONFIG_START/DONE/FAIL são ignorados: cálculo é 100% client-side
 }
 
 // ──────────────────────────────────────────
 // Auto-config helpers
 // ──────────────────────────────────────────
-function stopAutoconfig(success = false) {
+function applyAutoconfigResult() {
+  // Cálculo 100% client-side: vermelho = pico + 10%, amarelo = 80% do vermelho
+  if (autoconfigPeak < 30) {
+    finishAutoconfig(false, null);
+    showToast('Sinal muito baixo — fale mais alto durante a calibração.', 'err');
+    return;
+  }
+  const fV = autoconfigPeak * 1.10;
+  const fA = fV * 0.80;
+
+  document.getElementById('limitAmarelo').value = Math.round(fA);
+  document.getElementById('limitVermelho').value = Math.round(fV);
+  amareloLine  = fA;
+  vermelhoLine = fV;
+  currentAmarelo = fA;
+  currentVermelho = fV;
+  updateLimitTags();
+  audioChart.options.scales.y.suggestedMax = fV * 1.3;
+  audioChart.update('none');
+
+  sendCommand(`LIMITES:${fA.toFixed(1)},${fV.toFixed(1)}`);
+  finishAutoconfig(true, { peak: autoconfigPeak, amarelo: fA, vermelho: fV });
+}
+
+function finishAutoconfig(success, result) {
   autoconfigActive = false;
   clearInterval(autoconfigTimer);
   autoconfigBarWrap.classList.add('hidden');
   autoconfigBar.style.width = '0%';
   btnAutoconfig.disabled = false;
   btnAutoconfig.textContent = 'Iniciar Calibração Automática';
-  if (!success) autoconfigStatus.textContent = '';
-  else autoconfigStatus.textContent = '✓ Calibração concluída!';
+
+  if (!success || !result) {
+    autoconfigStatus.textContent = '';
+    return;
+  }
+  autoconfigStatus.innerHTML =
+    `<span style="color:var(--green)">✓ Pico capturado: <strong>${Math.round(result.peak)}</strong></span>` +
+    ` &nbsp;→&nbsp; ` +
+    `<span style="color:var(--amber)">Amarelo: <strong>${Math.round(result.amarelo)}</strong></span>` +
+    ` &nbsp;|&nbsp; ` +
+    `<span style="color:var(--red)">Vermelho: <strong>${Math.round(result.vermelho)}</strong></span>`;
 }
+
+// Alias mantido para resetUI chamar sem quebrar
+function stopAutoconfig() { finishAutoconfig(false, null); }
 
 // ──────────────────────────────────────────
 // Event Listeners de Ações
@@ -868,24 +876,40 @@ document.getElementById('btnNovaSenha').addEventListener('click', async () => {
   await sendCommand(`ALTERARSENHA:${pw1}`);
 });
 
-// Auto-config
+// Auto-config — lógica de timer e cálculo 100% client-side
 btnAutoconfig.addEventListener('click', async () => {
   if (autoconfigActive) return;
+
+  // Envia AUTOCONFIG ao firmware para resetar EMA e iniciar janela limpa de leitura
   const ok = await sendCommand('AUTOCONFIG');
   if (!ok) return;
 
   autoconfigActive = true;
-  autoconfigProgress = 0;
-  autoconfigStatus.textContent = '⏱ Analisando... 10s restantes';
+  autoconfigPeak   = 0;
+  autoconfigStatus.textContent = '';
   autoconfigBarWrap.classList.remove('hidden');
   autoconfigBar.style.width = '0%';
   btnAutoconfig.disabled = true;
   btnAutoconfig.textContent = 'Calibrando…';
 
-  // Fallback local: se em 12s não chegou DONE, cancela UI
-  setTimeout(() => {
-    if (autoconfigActive) stopAutoconfig(false);
-  }, 12000);
+  const TOTAL_MS  = 10000;
+  const startedAt = Date.now();
+
+  // Timer client-side: atualiza barra e countdown a cada 200ms
+  autoconfigTimer = setInterval(() => {
+    const elapsed  = Date.now() - startedAt;
+    const pct      = Math.min((elapsed / TOTAL_MS) * 100, 100);
+    const secLeft  = Math.max(Math.ceil((TOTAL_MS - elapsed) / 1000), 0);
+
+    autoconfigBar.style.width = pct + '%';
+    autoconfigStatus.textContent =
+      `⏱ Analisando... ${secLeft}s restantes   |   Pico atual: ${Math.round(autoconfigPeak)}`;
+
+    if (elapsed >= TOTAL_MS) {
+      clearInterval(autoconfigTimer);
+      applyAutoconfigResult();   // Calcula e aplica os limites
+    }
+  }, 200);
 });
 </script>
 </body>
