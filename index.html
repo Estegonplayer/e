@@ -1,3 +1,26 @@
+
+Bem-vindo(a), Dev! Sou o Claude.
+
+Traga qualquer coisa—um problema difícil, uma ideia meio formada, algo que você precisa escrever. Vamos resolver juntos.
+
+Por onde você quer começar?
+
+
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>E-silent — Painel de Configuração</title> <link rel="preconnect" href="https://fonts.googleapis.com"> <link href="https://fonts.googleapis.
+
+pasted
+
+
+opa, faz um favor, melhora a detecção de voz, com diferenciação de ruído e impactos, ou seja, ele não surta com uma única batida ou espirro, mas a voz continua eleva a faixa com a média da própria voz. se a pessoa começar a falar alto de mais ele avisa o amarelo, se continuar, aí pisca vermelho. Além disso, já manda o html modificado também com a opção de alterar todas as cores, tipo, uma janelinha de seleção onde seleciono as cores de cada aviso, além de um botãozinho que reseta para as cores originais. Além disso, aumente a calibração pra 30s e permita salvar (no navegador) as configurações, pra enviar em outros aparelhos de forma que fiquem iguais. Por favor, lembre-se que a medição precisa é muito importante, e deve estar nas faixas da voz, tendo certeza de quando a voz está alta ou não, lembre também que a faixa não pode subir só por constancia de fala, mas por altura da fala, onde o teto dos ultimos 5 segundos é usado pra confirmar se a pessoa está falando alto ou não
+
+
+Claude é uma IA e pode cometer erros. Por favor, verifique as respostas.
+Conteúdo colado
+31.68 KB •916 linhas
+•
+A formatação pode estar inconsistente com a fonte
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -23,12 +46,6 @@
       --accent-dim:  #4338ca;
       --mono:        'IBM Plex Mono', monospace;
       --sans:        'IBM Plex Sans', sans-serif;
-
-      /* Cores dinâmicas dos alertas (editáveis pelo usuário) */
-      --color-verde:    #22c55e;
-      --color-amarelo:  #f59e0b;
-      --color-vermelho: #ef4444;
-      --color-calib:    #06b6d4;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,21 +70,36 @@
       gap: 12px;
       margin-bottom: 24px;
     }
-    .traffic-icon { display: flex; flex-direction: column; gap: 4px; }
-    .traffic-icon span {
-      width: 10px; height: 10px; border-radius: 50%;
-      transition: background 0.4s, box-shadow 0.4s;
+    .traffic-icon {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .dot-r { background: var(--color-vermelho); box-shadow: 0 0 6px var(--color-vermelho); }
-    .dot-y { background: var(--color-amarelo);  box-shadow: 0 0 6px var(--color-amarelo); }
-    .dot-g { background: var(--color-verde);    box-shadow: 0 0 6px var(--color-verde); }
+    .traffic-icon span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .dot-r { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .dot-y { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .dot-g { background: var(--green); box-shadow: 0 0 6px var(--green); }
 
-    .header-title h1 { font-family: var(--mono); font-size: 1.25rem; letter-spacing: -0.5px; color: #fff; }
-    .header-title p  { font-family: var(--mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .header-title h1 {
+      font-family: var(--mono);
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .header-title p {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
     /* ── Card ── */
     .card {
-      width: 100%; max-width: 560px;
+      width: 100%;
+      max-width: 560px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -75,32 +107,68 @@
       margin-bottom: 12px;
     }
     .card-header {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       background: var(--surface2);
     }
-    .card-header span { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
-    .card-header .badge { font-family: var(--mono); font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
-    .badge-off  { background: #1f1215; color: var(--red);    border: 1px solid #3d1515; }
-    .badge-on   { background: #0f231a; color: var(--green);  border: 1px solid #1a4d2e; }
-    .badge-auth { background: #13152b; color: var(--accent); border: 1px solid #2d3070; }
+    .card-header span {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .card-header .badge {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .badge-off  { background: #1f1215; color: var(--red);   border: 1px solid #3d1515; }
+    .badge-on   { background: #0f231a; color: var(--green); border: 1px solid #1a4d2e; }
+    .badge-auth { background: #13152b; color: var(--accent);border: 1px solid #2d3070; }
+
     .card-body { padding: 18px; }
 
     /* ── Connection row ── */
-    .conn-row { display: flex; align-items: center; gap: 12px; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; transition: background 0.3s; }
+    .conn-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
     .status-dot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
-    #statusText { font-family: var(--mono); font-size: 0.85rem; flex: 1; }
+    #statusText {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      flex: 1;
+    }
 
     /* ── Buttons ── */
     .btn {
-      font-family: var(--mono); font-size: 0.82rem; font-weight: 600;
-      border: none; border-radius: 6px; padding: 10px 16px;
-      cursor: pointer; transition: opacity 0.15s, transform 0.1s; white-space: nowrap;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      white-space: nowrap;
     }
     .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
     .btn-primary  { background: var(--accent);     color: #fff; }
     .btn-primary:hover:not(:disabled) { background: var(--accent-dim); }
     .btn-danger   { background: #7f1d1d; color: var(--red); border: 1px solid #991b1b; }
@@ -108,118 +176,160 @@
     .btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
     .btn-cyan     { background: #0c2a33; color: var(--cyan); border: 1px solid #0e4d5e; }
     .btn-cyan:hover:not(:disabled) { background: #103542; }
-    .btn-ghost    { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-    .btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--text-muted); }
     .btn-full { width: 100%; margin-top: 10px; padding: 12px; }
 
     /* ── Form elements ── */
-    label { display: block; font-size: 0.78rem; font-family: var(--mono); color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    input[type="text"], input[type="number"], input[type="password"], select {
-      width: 100%; background: var(--bg); border: 1px solid var(--border);
-      border-radius: 6px; color: var(--text); font-family: var(--mono);
-      font-size: 0.9rem; padding: 10px 12px; outline: none; transition: border-color 0.2s;
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.2s;
     }
     input:focus, select:focus { border-color: var(--accent); }
     input::placeholder { color: var(--text-muted); }
     select option { background: var(--surface2); }
-    .input-group { display: flex; gap: 8px; align-items: flex-end; }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
     .input-group input, .input-group select { flex: 1; }
+
     .pw-wrap { position: relative; }
     .pw-wrap input { padding-right: 40px; }
-    .pw-eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 4px; transition: color 0.15s; }
+    .pw-eye {
+      position: absolute;
+      right: 10px; top: 50%; transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text-muted); cursor: pointer;
+      font-size: 1rem; padding: 4px;
+      transition: color 0.15s;
+    }
     .pw-eye:hover { color: var(--text); }
-    .form-row { display: flex; gap: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
     .form-row > * { flex: 1; }
+
     .field { margin-bottom: 14px; }
     .field:last-child { margin-bottom: 0; }
 
     /* ── Live chart ── */
-    .chart-wrap { position: relative; height: 140px; margin-bottom: 14px; }
-    .chart-limits { position: absolute; right: 0; top: 0; display: flex; flex-direction: column; gap: 4px; pointer-events: none; }
-    .limit-tag { font-family: var(--mono); font-size: 0.65rem; padding: 2px 6px; border-radius: 3px; }
-    .limit-tag.amarelo { background: #2d220a; color: var(--color-amarelo); }
-    .limit-tag.vermelho { background: #1f0808; color: var(--color-vermelho); }
-    .chart-value { font-family: var(--mono); font-size: 2rem; font-weight: 600; color: var(--color-verde); transition: color 0.3s; text-align: center; line-height: 1; }
-    .chart-value.warn  { color: var(--color-amarelo); }
-    .chart-value.alert { color: var(--color-vermelho); }
-    .chart-label { font-family: var(--mono); font-size: 0.68rem; color: var(--text-muted); text-align: center; margin-top: 2px; }
+    .chart-wrap {
+      position: relative;
+      height: 140px;
+      margin-bottom: 14px;
+    }
+    .chart-limits {
+      position: absolute;
+      right: 0; top: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      pointer-events: none;
+    }
+    .limit-tag {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .limit-tag.amarelo { background: #2d220a; color: var(--amber); }
+    .limit-tag.vermelho { background: #1f0808; color: var(--red);   }
 
-    /* ── Indicador de estado (sustain / impacto) ── */
-    .voice-state-row {
-      display: flex; gap: 8px; margin-top: 10px; margin-bottom: 4px; align-items: center;
+    .chart-value {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--green);
+      transition: color 0.3s;
+      text-align: center;
+      line-height: 1;
     }
-    .voice-pill {
-      font-family: var(--mono); font-size: 0.68rem; padding: 3px 9px; border-radius: 20px;
-      border: 1px solid var(--border); color: var(--text-muted); background: var(--bg);
-      transition: all 0.3s;
+    .chart-value.warn  { color: var(--amber); }
+    .chart-value.alert { color: var(--red);   }
+    .chart-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 2px;
     }
-    .voice-pill.active-verde    { border-color: var(--color-verde);    color: var(--color-verde);    background: #0a1f12; }
-    .voice-pill.active-amarelo  { border-color: var(--color-amarelo);  color: var(--color-amarelo);  background: #1e1500; }
-    .voice-pill.active-vermelho { border-color: var(--color-vermelho); color: var(--color-vermelho); background: #1f0808; }
-    .voice-pill.active-impacto  { border-color: #a855f7; color: #a855f7; background: #130d1f; }
 
     /* ── Auto-config ── */
-    .autoconfig-bar-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; height: 6px; margin-top: 10px; overflow: hidden; }
-    .autoconfig-bar { height: 100%; background: var(--color-calib); width: 0%; transition: width 0.9s linear; box-shadow: 0 0 8px var(--color-calib); }
-    #autoconfigStatus { font-family: var(--mono); font-size: 0.75rem; color: var(--color-calib); margin-top: 6px; min-height: 1.2em; }
-
-    /* ── Seletor de Cores ── */
-    .color-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px; margin-bottom: 4px;
+    .autoconfig-bar-wrap {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      height: 6px;
+      margin-top: 10px;
+      overflow: hidden;
     }
-    .color-row {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 8px; padding: 10px 12px;
+    .autoconfig-bar {
+      height: 100%;
+      background: var(--cyan);
+      width: 0%;
+      transition: width 0.9s linear;
+      box-shadow: 0 0 8px var(--cyan);
     }
-    .color-swatch {
-      width: 28px; height: 28px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.1);
-      flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;
-      transition: transform 0.15s;
+    #autoconfigStatus {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--cyan);
+      margin-top: 6px;
+      min-height: 1.2em;
     }
-    .color-swatch:hover { transform: scale(1.1); }
-    .color-swatch input[type="color"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer;
-      width: 100%; height: 100%; padding: 0; border: none;
-    }
-    .color-row-label { font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); flex: 1; }
-    .color-hex { font-family: var(--mono); font-size: 0.7rem; color: var(--text-muted); }
-
-    /* ── Perfis Salvos ── */
-    .profile-row { display: flex; gap: 8px; align-items: center; }
-    .profile-select { flex: 1; }
-    .profile-actions { display: flex; gap: 6px; }
-    .profile-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
-    .profile-item {
-      display: flex; align-items: center; gap: 8px; padding: 8px 12px;
-      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
-      font-family: var(--mono); font-size: 0.78rem;
-    }
-    .profile-item-name { flex: 1; color: var(--text); }
-    .profile-item-meta { color: var(--text-muted); font-size: 0.7rem; }
-    .profile-item-btns { display: flex; gap: 4px; }
-    .btn-xs { padding: 4px 8px; font-size: 0.7rem; }
 
     /* ── Divider ── */
-    .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
 
     /* ── Toast ── */
     #toast {
-      position: fixed; bottom: 24px; left: 50%;
+      position: fixed;
+      bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
-      padding: 10px 20px; font-family: var(--mono); font-size: 0.82rem; color: var(--text);
-      transition: transform 0.3s ease; z-index: 100; white-space: nowrap;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text);
+      transition: transform 0.3s ease;
+      z-index: 100;
+      white-space: nowrap;
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
-    #toast.ok  { border-color: var(--green); color: var(--green); }
-    #toast.err { border-color: var(--red);   color: var(--red);   }
+    #toast.ok   { border-color: var(--green); color: var(--green); }
+    #toast.err  { border-color: var(--red);   color: var(--red);   }
 
     .hidden { display: none !important; }
-
-    /* ── Export badge ── */
-    .export-row { display: flex; gap: 8px; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -232,7 +342,7 @@
   </div>
   <div class="header-title">
     <h1>E-silent</h1>
-    <p>Painel de Configuração v2</p>
+    <p>Painel de Configuração</p>
   </div>
 </div>
 
@@ -278,25 +388,18 @@
     <span class="badge badge-on" id="liveBadge">● AO VIVO</span>
   </div>
   <div class="card-body">
-    <div style="display:flex; gap:16px; align-items:center; margin-bottom:8px;">
+    <div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">
       <div>
         <div class="chart-value" id="liveValue">0</div>
-        <div class="chart-label">intensidade</div>
+        <div class="chart-label">intensidade atual</div>
       </div>
       <div class="chart-wrap" style="flex:1; margin-bottom:0;">
         <canvas id="audioChart"></canvas>
         <div class="chart-limits">
           <span class="limit-tag vermelho" id="tagVermelho">V: —</span>
-          <span class="limit-tag amarelo"  id="tagAmarelo">A: —</span>
+          <span class="limit-tag amarelo" id="tagAmarelo">A: —</span>
         </div>
       </div>
-    </div>
-
-    <!-- Indicadores de estado de voz -->
-    <div class="voice-state-row">
-      <span class="voice-pill" id="pillSilencio">● silêncio</span>
-      <span class="voice-pill" id="pillVoz">● voz detectada</span>
-      <span class="voice-pill" id="pillImpacto">⚡ impacto ignorado</span>
     </div>
 
     <hr class="divider">
@@ -305,12 +408,12 @@
     <div class="field">
       <label>Calibração Automática</label>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
-        Fale no volume normal de trabalho durante <strong style="color:var(--text)">30 segundos</strong>.
-        O painel captura o pico sustentado da sua voz (impactos isolados são ignorados) e define
-        <span style="color:var(--color-vermelho)">vermelho</span> em <strong>80% do pico</strong> e
-        <span style="color:var(--color-amarelo)">amarelo</span> em <strong>55%</strong>.
+        Fale no volume normal de trabalho durante <strong style="color:var(--text)">10 segundos</strong>.
+        O painel captura o pico da sua voz e define o <span style="color:var(--red)">limite vermelho</span> em
+        <strong style="color:var(--text)">+10% acima desse pico</strong>, e o
+        <span style="color:var(--amber)">amarelo</span> em 80% do vermelho.
       </p>
-      <button class="btn btn-cyan btn-full" id="btnAutoconfig" disabled>Iniciar Calibração Automática (30s)</button>
+      <button class="btn btn-cyan btn-full" id="btnAutoconfig" disabled>Iniciar Calibração Automática</button>
       <div class="autoconfig-bar-wrap hidden" id="autoconfigBarWrap">
         <div class="autoconfig-bar" id="autoconfigBar"></div>
       </div>
@@ -332,11 +435,11 @@
       <label>Limites de Intensidade</label>
       <div class="form-row">
         <div>
-          <label style="color:var(--color-amarelo)">▲ Amarelo</label>
+          <label style="color:var(--amber)">▲ Amarelo</label>
           <input type="number" id="limitAmarelo" placeholder="2300">
         </div>
         <div>
-          <label style="color:var(--color-vermelho)">▲ Vermelho</label>
+          <label style="color:var(--red)">▲ Vermelho</label>
           <input type="number" id="limitVermelho" placeholder="2500">
         </div>
       </div>
@@ -359,7 +462,7 @@
 
     <hr class="divider">
 
-    <!-- Nome -->
+    <!-- Nome do dispositivo -->
     <div class="field">
       <label>Nome Bluetooth (aplica no boot)</label>
       <div class="input-group">
@@ -370,17 +473,17 @@
 
     <hr class="divider">
 
-    <!-- Senha -->
+    <!-- Troca de senha -->
     <div class="field">
       <label>Alterar Senha (mín. 4 caracteres)</label>
       <div style="display:flex; flex-direction:column; gap:8px;">
         <div class="pw-wrap">
           <input type="password" id="newPassword" placeholder="Nova senha">
-          <button class="pw-eye" onclick="togglePw('newPassword', this)">👁</button>
+          <button class="pw-eye" onclick="togglePw('newPassword', this)" title="Ver senha">👁</button>
         </div>
         <div class="pw-wrap">
           <input type="password" id="confirmPassword" placeholder="Confirmar nova senha">
-          <button class="pw-eye" onclick="togglePw('confirmPassword', this)">👁</button>
+          <button class="pw-eye" onclick="togglePw('confirmPassword', this)" title="Ver senha">👁</button>
         </div>
         <button class="btn btn-danger btn-full" id="btnNovaSenha">Alterar Senha</button>
       </div>
@@ -389,395 +492,67 @@
   </div>
 </div>
 
-<!-- ── Cores dos Alertas ── -->
-<div class="card">
-  <div class="card-header">
-    <span>Cores dos Alertas (Interface)</span>
-    <button class="btn btn-ghost btn-xs" id="btnResetCores" style="font-size:0.7rem; padding:4px 10px;">↺ Restaurar</button>
-  </div>
-  <div class="card-body">
-    <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; line-height:1.5;">
-      Personaliza as cores exibidas neste painel. Não afeta as cores do LED físico do dispositivo.
-    </p>
-    <div class="color-grid">
-      <!-- Verde -->
-      <div class="color-row">
-        <div class="color-swatch" id="swatchVerde" style="background:var(--color-verde)">
-          <input type="color" id="pickerVerde" value="#22c55e">
-        </div>
-        <span class="color-row-label">● Normal / OK</span>
-        <span class="color-hex" id="hexVerde">#22c55e</span>
-      </div>
-      <!-- Amarelo -->
-      <div class="color-row">
-        <div class="color-swatch" id="swatchAmarelo" style="background:var(--color-amarelo)">
-          <input type="color" id="pickerAmarelo" value="#f59e0b">
-        </div>
-        <span class="color-row-label">▲ Atenção</span>
-        <span class="color-hex" id="hexAmarelo">#f59e0b</span>
-      </div>
-      <!-- Vermelho -->
-      <div class="color-row">
-        <div class="color-swatch" id="swatchVermelho" style="background:var(--color-vermelho)">
-          <input type="color" id="pickerVermelho" value="#ef4444">
-        </div>
-        <span class="color-row-label">✖ Alerta máximo</span>
-        <span class="color-hex" id="hexVermelho">#ef4444</span>
-      </div>
-      <!-- Calib -->
-      <div class="color-row">
-        <div class="color-swatch" id="swatchCalib" style="background:var(--color-calib)">
-          <input type="color" id="pickerCalib" value="#06b6d4">
-        </div>
-        <span class="color-row-label">◎ Calibração</span>
-        <span class="color-hex" id="hexCalib">#06b6d4</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── Perfis de Configuração ── -->
-<div class="card">
-  <div class="card-header">
-    <span>Perfis Salvos (Navegador)</span>
-  </div>
-  <div class="card-body">
-    <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; line-height:1.5;">
-      Salva os limites e cores atuais como um perfil no navegador. Use para replicar a configuração em outros dispositivos E-silent sem redigitar tudo.
-    </p>
-    <div class="field">
-      <label>Nome do Perfil</label>
-      <div class="input-group">
-        <input type="text" id="profileName" placeholder="Ex: Sala de Reunião A">
-        <button class="btn btn-primary" id="btnSaveProfile">Salvar</button>
-      </div>
-    </div>
-    <div class="profile-list" id="profileList">
-      <!-- Preenchido via JS -->
-    </div>
-    <div class="export-row">
-      <button class="btn btn-outline" style="flex:1; margin-top:0;" id="btnExportAll">⬇ Exportar todos (.json)</button>
-      <label class="btn btn-ghost" style="margin-top:0; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
-        ⬆ Importar
-        <input type="file" id="fileImport" accept=".json" style="display:none">
-      </label>
-    </div>
-  </div>
-</div>
-
 <div id="toast"></div>
 
 <script>
 // ──────────────────────────────────────────
-// Constantes BLE
+// Constantes BLE (idênticas ao firmware)
 // ──────────────────────────────────────────
 const SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-const AUTOCONFIG_TOTAL_MS = 30000;
 
-// ──────────────────────────────────────────
-// Estado Global
-// ──────────────────────────────────────────
+// Estado global
 let bleDevice         = null;
 let bleCharacteristic = null;
 let isAuth            = false;
-let autoconfigActive  = false;
-let autoconfigTimer   = null;
-let autoconfigPeak    = 0;
-let amareloLine       = 0;
-let vermelhoLine      = 0;
+let autoconfigActive   = false;
+let autoconfigTimer    = null;
+let autoconfigProgress = 0;
+let autoconfigPeak     = 0;   // Pico máximo capturado pelo HTML durante a janela de 10s
 
-// Estado de voz para pills de status
-let impactFlashTimer  = null;
-
-// Cores padrão
-const DEFAULT_COLORS = {
-  verde:    "#22c55e",
-  amarelo:  "#f59e0b",
-  vermelho: "#ef4444",
-  calib:    "#06b6d4",
-};
+// Limites (populados do dispositivo após login)
+let currentAmarelo = 0;
+let currentVermelho = 0;
 
 // ──────────────────────────────────────────
-// Cores — Carregar / Aplicar / Salvar
+// Referências DOM
 // ──────────────────────────────────────────
-function loadColors() {
-  const saved = JSON.parse(localStorage.getItem("esilent_colors") || "{}");
-  return { ...DEFAULT_COLORS, ...saved };
-}
-
-function applyColors(c) {
-  const r = document.documentElement;
-  r.style.setProperty("--color-verde",    c.verde);
-  r.style.setProperty("--color-amarelo",  c.amarelo);
-  r.style.setProperty("--color-vermelho", c.vermelho);
-  r.style.setProperty("--color-calib",    c.calib);
-
-  // Swatches
-  document.getElementById("swatchVerde").style.background    = c.verde;
-  document.getElementById("swatchAmarelo").style.background  = c.amarelo;
-  document.getElementById("swatchVermelho").style.background = c.vermelho;
-  document.getElementById("swatchCalib").style.background    = c.calib;
-
-  // Pickers
-  document.getElementById("pickerVerde").value    = c.verde;
-  document.getElementById("pickerAmarelo").value  = c.amarelo;
-  document.getElementById("pickerVermelho").value = c.vermelho;
-  document.getElementById("pickerCalib").value    = c.calib;
-
-  // Hex labels
-  document.getElementById("hexVerde").textContent    = c.verde;
-  document.getElementById("hexAmarelo").textContent  = c.amarelo;
-  document.getElementById("hexVermelho").textContent = c.vermelho;
-  document.getElementById("hexCalib").textContent    = c.calib;
-
-  // Atualiza linhas do gráfico
-  if (audioChart) {
-    audioChart.data.datasets[1].borderColor = hexToRgba(c.amarelo, 0.6);
-    audioChart.data.datasets[2].borderColor = hexToRgba(c.vermelho, 0.6);
-    audioChart.update("none");
-  }
-
-  // Limit tags
-  document.getElementById("tagAmarelo").style.color  = c.amarelo;
-  document.getElementById("tagVermelho").style.color = c.vermelho;
-}
-
-function saveColors(c) {
-  localStorage.setItem("esilent_colors", JSON.stringify(c));
-  applyColors(c);
-}
-
-function currentColors() {
-  return {
-    verde:    document.getElementById("pickerVerde").value,
-    amarelo:  document.getElementById("pickerAmarelo").value,
-    vermelho: document.getElementById("pickerVermelho").value,
-    calib:    document.getElementById("pickerCalib").value,
-  };
-}
-
-function hexToRgba(hex, alpha) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-// Pickers: atualiza em tempo real
-["Verde","Amarelo","Vermelho","Calib"].forEach(name => {
-  const picker  = document.getElementById(`picker${name}`);
-  const swatch  = document.getElementById(`swatch${name}`);
-  const hexSpan = document.getElementById(`hex${name.toLowerCase()}`);
-
-  picker.addEventListener("input", () => {
-    const c = currentColors();
-    saveColors(c);
-    swatch.style.background = picker.value;
-    hexSpan.textContent     = picker.value;
-  });
-});
-
-document.getElementById("btnResetCores").addEventListener("click", () => {
-  saveColors(DEFAULT_COLORS);
-  showToast("✓ Cores restauradas ao padrão.");
-});
-
-// ──────────────────────────────────────────
-// Perfis — localStorage
-// ──────────────────────────────────────────
-const PROFILES_KEY = "esilent_profiles";
-
-function getProfiles() {
-  return JSON.parse(localStorage.getItem(PROFILES_KEY) || "[]");
-}
-
-function saveProfile(name) {
-  const profiles = getProfiles();
-  const profile = {
-    id:       Date.now(),
-    name:     name,
-    date:     new Date().toLocaleDateString("pt-BR"),
-    amarelo:  parseFloat(document.getElementById("limitAmarelo").value) || amareloLine,
-    vermelho: parseFloat(document.getElementById("limitVermelho").value) || vermelhoLine,
-    confirmacao: document.getElementById("selectConf").value,
-    cores:    currentColors(),
-  };
-  // Substitui se nome igual
-  const idx = profiles.findIndex(p => p.name === name);
-  if (idx >= 0) profiles[idx] = profile; else profiles.push(profile);
-  localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
-  renderProfileList();
-  showToast(`✓ Perfil "${name}" salvo!`);
-}
-
-function loadProfile(id) {
-  const profiles = getProfiles();
-  const p = profiles.find(p => p.id === id);
-  if (!p) return;
-
-  document.getElementById("limitAmarelo").value  = Math.round(p.amarelo);
-  document.getElementById("limitVermelho").value = Math.round(p.vermelho);
-  document.getElementById("selectConf").value    = p.confirmacao || "LIGADO";
-  amareloLine  = p.amarelo;
-  vermelhoLine = p.vermelho;
-  updateLimitTags();
-  if (p.cores) saveColors(p.cores);
-  showToast(`✓ Perfil "${p.name}" carregado!`);
-}
-
-function applyProfileToDevice(id) {
-  const profiles = getProfiles();
-  const p = profiles.find(p => p.id === id);
-  if (!p) return;
-
-  if (!isAuth) { showToast("Conecte e autentique antes de aplicar.", "err"); return; }
-
-  document.getElementById("limitAmarelo").value  = Math.round(p.amarelo);
-  document.getElementById("limitVermelho").value = Math.round(p.vermelho);
-  document.getElementById("selectConf").value    = p.confirmacao || "LIGADO";
-  amareloLine  = p.amarelo;
-  vermelhoLine = p.vermelho;
-  updateLimitTags();
-  if (p.cores) saveColors(p.cores);
-
-  sendCommand(`LIMITES:${p.amarelo.toFixed(1)},${p.vermelho.toFixed(1)}`);
-  sendCommand(`CONFIRMACAO:${p.confirmacao || "LIGADO"}`);
-  showToast(`✓ Perfil "${p.name}" aplicado ao dispositivo!`);
-}
-
-function deleteProfile(id) {
-  const profiles = getProfiles().filter(p => p.id !== id);
-  localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
-  renderProfileList();
-  showToast("Perfil excluído.");
-}
-
-function renderProfileList() {
-  const list = document.getElementById("profileList");
-  const profiles = getProfiles();
-  if (profiles.length === 0) {
-    list.innerHTML = `<p style="font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);padding:8px 0;">Nenhum perfil salvo ainda.</p>`;
-    return;
-  }
-  list.innerHTML = profiles.map(p => `
-    <div class="profile-item">
-      <div>
-        <div class="profile-item-name">${escHtml(p.name)}</div>
-        <div class="profile-item-meta">A:${Math.round(p.amarelo)} V:${Math.round(p.vermelho)} — ${p.date}</div>
-      </div>
-      <div class="profile-item-btns">
-        <button class="btn btn-ghost btn-xs" onclick="loadProfile(${p.id})" title="Carregar no painel">⬇</button>
-        <button class="btn btn-cyan btn-xs" onclick="applyProfileToDevice(${p.id})" title="Aplicar ao dispositivo conectado">▶</button>
-        <button class="btn btn-danger btn-xs" onclick="deleteProfile(${p.id})" title="Excluir">✕</button>
-      </div>
-    </div>
-  `).join("");
-}
-
-function escHtml(s) {
-  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-
-document.getElementById("btnSaveProfile").addEventListener("click", () => {
-  const name = document.getElementById("profileName").value.trim();
-  if (!name) { showToast("Digite um nome para o perfil.", "err"); return; }
-  saveProfile(name);
-});
-
-// Exportar
-document.getElementById("btnExportAll").addEventListener("click", () => {
-  const profiles = getProfiles();
-  if (profiles.length === 0) { showToast("Nenhum perfil para exportar.", "err"); return; }
-  const blob = new Blob([JSON.stringify(profiles, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "esilent-perfis.json";
-  a.click();
-  showToast("✓ Perfis exportados!");
-});
-
-// Importar
-document.getElementById("fileImport").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    try {
-      const imported = JSON.parse(ev.target.result);
-      if (!Array.isArray(imported)) throw new Error("Formato inválido");
-      const existing = getProfiles();
-      // Merge: evita duplicatas por nome
-      imported.forEach(p => {
-        p.id = Date.now() + Math.random(); // Novo ID ao importar
-        const idx = existing.findIndex(e => e.name === p.name);
-        if (idx >= 0) existing[idx] = p; else existing.push(p);
-      });
-      localStorage.setItem(PROFILES_KEY, JSON.stringify(existing));
-      renderProfileList();
-      showToast(`✓ ${imported.length} perfil(is) importado(s)!`);
-    } catch {
-      showToast("Arquivo inválido.", "err");
-    }
-  };
-  reader.readAsText(file);
-  e.target.value = "";
-});
+const btnConnect    = document.getElementById('btnConnect');
+const statusText    = document.getElementById('statusText');
+const statusDot     = document.getElementById('statusDot');
+const connBadge     = document.getElementById('connBadge');
+const authBadge     = document.getElementById('authBadge');
+const authCard      = document.getElementById('authCard');
+const chartCard     = document.getElementById('chartCard');
+const configCard    = document.getElementById('configCard');
+const liveValue     = document.getElementById('liveValue');
+const tagAmarelo    = document.getElementById('tagAmarelo');
+const tagVermelho   = document.getElementById('tagVermelho');
+const btnAutoconfig = document.getElementById('btnAutoconfig');
+const autoconfigBarWrap = document.getElementById('autoconfigBarWrap');
+const autoconfigBar = document.getElementById('autoconfigBar');
+const autoconfigStatus = document.getElementById('autoconfigStatus');
 
 // ──────────────────────────────────────────
 // Toast
 // ──────────────────────────────────────────
 let toastTimeout;
-function showToast(msg, type = "ok") {
-  const t = document.getElementById("toast");
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
   t.textContent = msg;
   t.className   = `show ${type}`;
   clearTimeout(toastTimeout);
-  toastTimeout  = setTimeout(() => t.className = "", 3000);
+  toastTimeout  = setTimeout(() => t.className = '', 3000);
 }
 
 // ──────────────────────────────────────────
-// Utilitários
+// Utilitário: mostrar/ocultar senha
 // ──────────────────────────────────────────
 function togglePw(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  const show = inp.type === "password";
-  inp.type = show ? "text" : "password";
-  btn.textContent = show ? "🙈" : "👁";
-}
-
-// ──────────────────────────────────────────
-// Voice State Pills
-// ──────────────────────────────────────────
-let lastLiveVal = 0;
-
-function updateVoicePills(val, isImpact) {
-  const pSil = document.getElementById("pillSilencio");
-  const pVoz = document.getElementById("pillVoz");
-  const pImp = document.getElementById("pillImpacto");
-
-  // Reset all
-  pSil.className = "voice-pill";
-  pVoz.className = "voice-pill";
-  pImp.className = "voice-pill";
-
-  if (isImpact) {
-    pImp.className = "voice-pill active-impacto";
-    // Flash de 1.5s depois volta ao estado de voz
-    clearTimeout(impactFlashTimer);
-    impactFlashTimer = setTimeout(() => updateVoicePills(lastLiveVal, false), 1500);
-    return;
-  }
-
-  if (val < amareloLine * 0.2 || amareloLine === 0) {
-    pSil.className = "voice-pill active-verde";
-  } else if (val < amareloLine) {
-    pVoz.className = "voice-pill active-verde";
-  } else if (val < vermelhoLine) {
-    pVoz.className = "voice-pill active-amarelo";
-  } else {
-    pVoz.className = "voice-pill active-vermelho";
-  }
+  const inp  = document.getElementById(inputId);
+  const show = inp.type === 'password';
+  inp.type   = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
 }
 
 // ──────────────────────────────────────────
@@ -785,34 +560,35 @@ function updateVoicePills(val, isImpact) {
 // ──────────────────────────────────────────
 const MAX_POINTS = 80;
 const chartData  = new Array(MAX_POINTS).fill(0);
-const chartCtx   = document.getElementById("audioChart").getContext("2d");
-let colors = loadColors();
+const chartCtx   = document.getElementById('audioChart').getContext('2d');
+let amareloLine  = 0;
+let vermelhoLine = 0;
 
 const audioChart = new Chart(chartCtx, {
-  type: "line",
+  type: 'line',
   data: {
-    labels: chartData.map(() => ""),
+    labels: chartData.map(() => ''),
     datasets: [{
-      label: "Intensidade",
+      label: 'Intensidade',
       data:  [...chartData],
-      borderColor: colors.verde,
+      borderColor: '#22c55e',
       borderWidth: 1.5,
-      backgroundColor: hexToRgba(colors.verde, 0.07),
+      backgroundColor: 'rgba(34,197,94,0.07)',
       pointRadius: 0,
       tension: 0.3,
       fill: true,
     },{
-      label: "Amarelo",
+      label: 'Amarelo',
       data:  new Array(MAX_POINTS).fill(0),
-      borderColor: hexToRgba(colors.amarelo, 0.6),
+      borderColor: 'rgba(245,158,11,0.6)',
       borderWidth: 1,
       borderDash: [4,3],
       pointRadius: 0,
       fill: false,
     },{
-      label: "Vermelho",
+      label: 'Vermelho',
       data:  new Array(MAX_POINTS).fill(0),
-      borderColor: hexToRgba(colors.vermelho, 0.6),
+      borderColor: 'rgba(239,68,68,0.6)',
       borderWidth: 1,
       borderDash: [4,3],
       pointRadius: 0,
@@ -827,86 +603,91 @@ const audioChart = new Chart(chartCtx, {
     scales: {
       x: { display: false },
       y: {
-        min: 0, suggestedMax: 1000,
-        grid: { color: "rgba(255,255,255,0.04)" },
-        ticks: { color: "#6b7280", font: { family: "IBM Plex Mono", size: 10 }, maxTicksLimit: 4 },
+        min: 0,
+        suggestedMax: 1000,
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: {
+          color: '#6b7280',
+          font: { family: 'IBM Plex Mono', size: 10 },
+          maxTicksLimit: 4,
+        },
         border: { display: false }
       }
     }
   }
 });
 
-// Aplica cores salvas ao carregar
-applyColors(colors);
-
 function pushChartValue(val) {
   chartData.shift();
   chartData.push(val);
   audioChart.data.datasets[0].data = [...chartData];
 
-  if (audioChart.data.datasets[1].data[0] !== amareloLine)
+  // Actualiza linhas de limite se mudaram
+  if (audioChart.data.datasets[1].data[0] !== amareloLine) {
     audioChart.data.datasets[1].data = new Array(MAX_POINTS).fill(amareloLine);
-  if (audioChart.data.datasets[2].data[0] !== vermelhoLine)
+  }
+  if (audioChart.data.datasets[2].data[0] !== vermelhoLine) {
     audioChart.data.datasets[2].data = new Array(MAX_POINTS).fill(vermelhoLine);
+  }
 
-  const c = currentColors();
-  let color = c.verde;
-  if (val >= vermelhoLine && vermelhoLine > 0) color = c.vermelho;
-  else if (val >= amareloLine && amareloLine > 0) color = c.amarelo;
+  // Cor da linha principal baseada no estado
+  let color = '#22c55e';
+  if (val >= vermelhoLine && vermelhoLine > 0) color = '#ef4444';
+  else if (val >= amareloLine && amareloLine > 0) color = '#f59e0b';
   audioChart.data.datasets[0].borderColor = color;
-  audioChart.data.datasets[0].backgroundColor = hexToRgba(color, 0.07);
+  audioChart.data.datasets[0].backgroundColor = color.replace(')', ',0.07)').replace('rgb', 'rgba');
 
-  document.getElementById("liveValue").textContent = Math.round(val);
-  const lv = document.getElementById("liveValue");
-  lv.className = "chart-value";
-  if (val >= vermelhoLine && vermelhoLine > 0) lv.classList.add("alert");
-  else if (val >= amareloLine && amareloLine > 0) lv.classList.add("warn");
+  // Valor numérico ao vivo
+  liveValue.textContent = Math.round(val);
+  liveValue.className = 'chart-value';
+  if (val >= vermelhoLine && vermelhoLine > 0) liveValue.classList.add('alert');
+  else if (val >= amareloLine && amareloLine > 0) liveValue.classList.add('warn');
 
-  audioChart.update("none");
-  lastLiveVal = val;
-  updateVoicePills(val, false);
+  audioChart.update('none');
 }
 
 function updateLimitTags() {
-  document.getElementById("tagAmarelo").textContent  = `A: ${Math.round(amareloLine)}`;
-  document.getElementById("tagVermelho").textContent = `V: ${Math.round(vermelhoLine)}`;
+  tagAmarelo.textContent = `A: ${Math.round(amareloLine)}`;
+  tagVermelho.textContent = `V: ${Math.round(vermelhoLine)}`;
 }
 
 // ──────────────────────────────────────────
 // BLE — Conexão
 // ──────────────────────────────────────────
-document.getElementById("btnConnect").addEventListener("click", () => {
+btnConnect.addEventListener('click', () => {
   if (bleDevice && bleDevice.gatt.connected) disconnectDevice();
   else connectDevice();
 });
 
 async function connectDevice() {
   try {
-    document.getElementById("statusText").textContent = "Buscando dispositivo…";
+    statusText.textContent = 'Buscando dispositivo…';
     bleDevice = await navigator.bluetooth.requestDevice({
       acceptAllDevices: true,
       optionalServices: [SERVICE_UUID]
     });
-    bleDevice.addEventListener("gattserverdisconnected", onDisconnected);
+    bleDevice.addEventListener('gattserverdisconnected', onDisconnected);
 
-    document.getElementById("statusText").textContent = "Conectando…";
+    statusText.textContent = 'Conectando…';
     const server  = await bleDevice.gatt.connect();
     const service = await server.getPrimaryService(SERVICE_UUID);
     bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
+    // Ativa notificações BLE (necessário para o gráfico e respostas)
     await bleCharacteristic.startNotifications();
-    bleCharacteristic.addEventListener("characteristicvaluechanged", handleNotification);
+    bleCharacteristic.addEventListener('characteristicvaluechanged', handleNotification);
 
-    document.getElementById("statusText").textContent = `Conectado — ${bleDevice.name || "E-silent"}`;
-    document.getElementById("statusDot").classList.add("on");
-    document.getElementById("connBadge").textContent = "ONLINE";
-    document.getElementById("connBadge").className   = "badge badge-on";
-    document.getElementById("btnConnect").textContent = "Desconectar";
-    document.getElementById("authCard").classList.remove("hidden");
+    // UI: conectado
+    statusText.textContent = `Conectado — ${bleDevice.name || 'E-silent'}`;
+    statusDot.classList.add('on');
+    connBadge.textContent = 'ONLINE';
+    connBadge.className   = 'badge badge-on';
+    btnConnect.textContent = 'Desconectar';
+    authCard.classList.remove('hidden');
 
   } catch (err) {
-    console.error("[BLE]", err);
-    showToast("Falha ao conectar. Tente novamente.", "err");
+    console.error('[BLE] Erro de conexão:', err);
+    showToast('Falha ao conectar. Tente novamente.', 'err');
     resetUI();
   }
 }
@@ -916,22 +697,21 @@ function disconnectDevice() {
 }
 
 function onDisconnected() {
-  showToast("Dispositivo desconectado.", "err");
+  showToast('Dispositivo desconectado.', 'err');
   resetUI();
 }
 
 function resetUI() {
-  document.getElementById("statusText").textContent = "Desconectado";
-  document.getElementById("statusDot").classList.remove("on");
-  document.getElementById("connBadge").textContent = "OFFLINE";
-  document.getElementById("connBadge").className   = "badge badge-off";
-  document.getElementById("btnConnect").textContent = "Conectar";
-  document.getElementById("authCard").classList.add("hidden");
-  document.getElementById("chartCard").classList.add("hidden");
-  document.getElementById("configCard").classList.add("hidden");
-  document.getElementById("authBadge").textContent = "NÃO AUTENTICADO";
-  document.getElementById("authBadge").className   = "badge badge-off";
-  document.getElementById("btnAutoconfig").disabled = true;
+  statusText.textContent = 'Desconectado';
+  statusDot.classList.remove('on');
+  connBadge.textContent = 'OFFLINE';
+  connBadge.className   = 'badge badge-off';
+  btnConnect.textContent = 'Conectar';
+  authCard.classList.add('hidden');
+  chartCard.classList.add('hidden');
+  configCard.classList.add('hidden');
+  authBadge.textContent = 'NÃO AUTENTICADO';
+  authBadge.className   = 'badge badge-off';
   isAuth = false;
   bleDevice = null;
   bleCharacteristic = null;
@@ -939,81 +719,104 @@ function resetUI() {
 }
 
 // ──────────────────────────────────────────
-// BLE — Envio
+// BLE — Envio de Comandos
 // ──────────────────────────────────────────
 async function sendCommand(cmd) {
-  if (!bleCharacteristic) { showToast("Não conectado!", "err"); return false; }
+  if (!bleCharacteristic) { showToast('Não conectado!', 'err'); return false; }
   try {
     await bleCharacteristic.writeValue(new TextEncoder().encode(cmd));
     return true;
   } catch (err) {
-    console.error("[BLE]", err);
-    showToast("Erro ao enviar comando.", "err");
+    console.error('[BLE] Erro ao enviar:', err);
+    showToast('Erro ao enviar comando.', 'err');
     return false;
   }
 }
 
 // ──────────────────────────────────────────
-// BLE — Recepção
+// BLE — Recepção de Notificações
 // ──────────────────────────────────────────
 function handleNotification(event) {
   const raw = new TextDecoder().decode(event.target.value);
 
-  if (raw.startsWith("DATA:")) {
-    const val = parseFloat(raw.substring(5).split(",")[0]);
+  // ── Dados de áudio ao vivo ──
+  if (raw.startsWith('DATA:')) {
+    const val = parseFloat(raw.substring(5).split(',')[0]);
     if (!isNaN(val)) {
       pushChartValue(val);
+      // Tracking de pico client-side durante calibração (ignora CALIB: do firmware)
       if (autoconfigActive && val > autoconfigPeak) autoconfigPeak = val;
     }
     return;
   }
 
-  if (raw.startsWith("CONFIG:")) {
-    const [a, v, conf] = raw.substring(7).split(",");
+  // ── Configuração atual (retornada após login) ──
+  if (raw.startsWith('CONFIG:')) {
+    const [a, v, conf] = raw.substring(7).split(',');
     const fA = parseFloat(a), fV = parseFloat(v);
-    document.getElementById("limitAmarelo").value = Math.round(fA);
-    document.getElementById("limitVermelho").value = Math.round(fV);
-    document.getElementById("selectConf").value   = conf || "LIGADO";
-    amareloLine = fA; vermelhoLine = fV;
+    document.getElementById('limitAmarelo').value = Math.round(fA);
+    document.getElementById('limitVermelho').value = Math.round(fV);
+    document.getElementById('selectConf').value    = conf || 'LIGADO';
+    amareloLine  = fA;
+    vermelhoLine = fV;
+    currentAmarelo = fA;
+    currentVermelho = fV;
     updateLimitTags();
     audioChart.options.scales.y.suggestedMax = fV * 1.3;
     return;
   }
 
-  if (raw === "AUTH_FAIL")  { showToast("Senha incorreta.", "err"); return; }
-  if (raw === "NOT_AUTH")   { showToast("Não autenticado.", "err"); return; }
+  // ── Autenticação: senha errada ──
+  if (raw === 'AUTH_FAIL') {
+    showToast('Senha incorreta.', 'err');
+    return;
+  }
 
-  if (raw === "OK:LIMITES") {
-    showToast("✓ Limites salvos!");
-    amareloLine  = parseFloat(document.getElementById("limitAmarelo").value);
-    vermelhoLine = parseFloat(document.getElementById("limitVermelho").value);
+  // ── Não autenticado ──
+  if (raw === 'NOT_AUTH') {
+    showToast('Não autenticado.', 'err');
+    return;
+  }
+
+  // ── Respostas OK ──
+  if (raw === 'OK:LIMITES') {
+    showToast('✓ Limites salvos!');
+    // Atualiza linhas do gráfico
+    amareloLine  = parseFloat(document.getElementById('limitAmarelo').value);
+    vermelhoLine = parseFloat(document.getElementById('limitVermelho').value);
     updateLimitTags();
     return;
   }
-  if (raw === "OK:NOME")         { showToast("✓ Nome salvo! Aplica no boot."); return; }
-  if (raw === "OK:SENHA")        { showToast("✓ Senha alterada!"); document.getElementById("newPassword").value = ""; document.getElementById("confirmPassword").value = ""; return; }
-  if (raw === "OK:CONFIRMACAO")  { showToast("✓ Comportamento de travamento salvo!"); return; }
-  if (raw === "ERR:SENHA_CURTA") { showToast("Senha muito curta (mín. 4).", "err"); return; }
+  if (raw === 'OK:NOME')    { showToast('✓ Nome salvo! Aplica no boot.'); return; }
+  if (raw === 'OK:SENHA')   { showToast('✓ Senha alterada!'); document.getElementById('newPassword').value = ''; document.getElementById('confirmPassword').value = ''; return; }
+  if (raw === 'OK:CONFIRMACAO') { showToast('✓ Comportamento de travamento salvo!'); return; }
+  if (raw === 'ERR:SENHA_CURTA') { showToast('Senha muito curta (mín. 4).', 'err'); return; }
+
+  // Firmware AUTOCONFIG_START/DONE/FAIL são ignorados: cálculo é 100% client-side
 }
 
 // ──────────────────────────────────────────
-// Auto-config (30s, 100% client-side)
+// Auto-config helpers
 // ──────────────────────────────────────────
 function applyAutoconfigResult() {
+  // Cálculo 100% client-side: vermelho = pico + 10%, amarelo = 80% do vermelho
   if (autoconfigPeak < 30) {
     finishAutoconfig(false, null);
-    showToast("Sinal muito baixo — fale mais alto durante a calibração.", "err");
+    showToast('Sinal muito baixo — fale mais alto durante a calibração.', 'err');
     return;
   }
-  const fV = autoconfigPeak * 0.80;
-  const fA = autoconfigPeak * 0.55;
+  const fV = autoconfigPeak * 1.10;
+  const fA = fV * 0.80;
 
-  document.getElementById("limitAmarelo").value  = Math.round(fA);
-  document.getElementById("limitVermelho").value = Math.round(fV);
-  amareloLine = fA; vermelhoLine = fV;
+  document.getElementById('limitAmarelo').value = Math.round(fA);
+  document.getElementById('limitVermelho').value = Math.round(fV);
+  amareloLine  = fA;
+  vermelhoLine = fV;
+  currentAmarelo = fA;
+  currentVermelho = fV;
   updateLimitTags();
   audioChart.options.scales.y.suggestedMax = fV * 1.3;
-  audioChart.update("none");
+  audioChart.update('none');
 
   sendCommand(`LIMITES:${fA.toFixed(1)},${fV.toFixed(1)}`);
   finishAutoconfig(true, { peak: autoconfigPeak, amarelo: fA, vermelho: fV });
@@ -1022,99 +825,115 @@ function applyAutoconfigResult() {
 function finishAutoconfig(success, result) {
   autoconfigActive = false;
   clearInterval(autoconfigTimer);
-  document.getElementById("autoconfigBarWrap").classList.add("hidden");
-  document.getElementById("autoconfigBar").style.width = "0%";
-  document.getElementById("btnAutoconfig").disabled = false;
-  document.getElementById("btnAutoconfig").textContent = "Iniciar Calibração Automática (30s)";
-  if (!success || !result) { document.getElementById("autoconfigStatus").textContent = ""; return; }
-  const c = currentColors();
-  document.getElementById("autoconfigStatus").innerHTML =
-    `<span style="color:${c.verde}">✓ Pico capturado: <strong>${Math.round(result.peak)}</strong></span>` +
+  autoconfigBarWrap.classList.add('hidden');
+  autoconfigBar.style.width = '0%';
+  btnAutoconfig.disabled = false;
+  btnAutoconfig.textContent = 'Iniciar Calibração Automática';
+
+  if (!success || !result) {
+    autoconfigStatus.textContent = '';
+    return;
+  }
+  autoconfigStatus.innerHTML =
+    `<span style="color:var(--green)">✓ Pico capturado: <strong>${Math.round(result.peak)}</strong></span>` +
     ` &nbsp;→&nbsp; ` +
-    `<span style="color:${c.amarelo}">Amarelo: <strong>${Math.round(result.amarelo)}</strong></span>` +
+    `<span style="color:var(--amber)">Amarelo: <strong>${Math.round(result.amarelo)}</strong></span>` +
     ` &nbsp;|&nbsp; ` +
-    `<span style="color:${c.vermelho}">Vermelho: <strong>${Math.round(result.vermelho)}</strong></span>`;
+    `<span style="color:var(--red)">Vermelho: <strong>${Math.round(result.vermelho)}</strong></span>`;
 }
 
+// Alias mantido para resetUI chamar sem quebrar
 function stopAutoconfig() { finishAutoconfig(false, null); }
-
-document.getElementById("btnAutoconfig").addEventListener("click", async () => {
-  if (autoconfigActive) return;
-  const ok = await sendCommand("AUTOCONFIG");
-  if (!ok) return;
-
-  autoconfigActive = true;
-  autoconfigPeak   = 0;
-  document.getElementById("autoconfigStatus").textContent = "";
-  document.getElementById("autoconfigBarWrap").classList.remove("hidden");
-  document.getElementById("autoconfigBar").style.width = "0%";
-  document.getElementById("btnAutoconfig").disabled = true;
-  document.getElementById("btnAutoconfig").textContent = "Calibrando…";
-
-  const startedAt = Date.now();
-  autoconfigTimer = setInterval(() => {
-    const elapsed = Date.now() - startedAt;
-    const pct     = Math.min((elapsed / AUTOCONFIG_TOTAL_MS) * 100, 100);
-    const secLeft = Math.max(Math.ceil((AUTOCONFIG_TOTAL_MS - elapsed) / 1000), 0);
-    document.getElementById("autoconfigBar").style.width = pct + "%";
-    document.getElementById("autoconfigStatus").textContent =
-      `⏱ Analisando... ${secLeft}s restantes   |   Pico atual: ${Math.round(autoconfigPeak)}`;
-
-    if (elapsed >= AUTOCONFIG_TOTAL_MS) {
-      clearInterval(autoconfigTimer);
-      applyAutoconfigResult();
-    }
-  }, 200);
-});
 
 // ──────────────────────────────────────────
 // Event Listeners de Ações
 // ──────────────────────────────────────────
-document.getElementById("btnLogin").addEventListener("click", async () => {
-  const pass = document.getElementById("password").value;
-  if (!pass) { showToast("Digite a senha.", "err"); return; }
+
+// Login
+document.getElementById('btnLogin').addEventListener('click', async () => {
+  const pass = document.getElementById('password').value;
+  if (!pass) { showToast('Digite a senha.', 'err'); return; }
+
   const ok = await sendCommand(`LOGIN:${pass}`);
   if (!ok) return;
+
+  // A resposta CONFIG: chega via notificação.
+  // Enquanto aguardamos, mostramos as seções.
   isAuth = true;
-  document.getElementById("authBadge").textContent = "AUTENTICADO";
-  document.getElementById("authBadge").className   = "badge badge-auth";
-  document.getElementById("chartCard").classList.remove("hidden");
-  document.getElementById("configCard").classList.remove("hidden");
-  document.getElementById("btnAutoconfig").disabled = false;
-  document.getElementById("password").value = "";
+  authBadge.textContent = 'AUTENTICADO';
+  authBadge.className   = 'badge badge-auth';
+  chartCard.classList.remove('hidden');
+  configCard.classList.remove('hidden');
+  btnAutoconfig.disabled = false;
+  document.getElementById('password').value = '';
 });
 
-document.getElementById("btnLimites").addEventListener("click", async () => {
-  const a = parseFloat(document.getElementById("limitAmarelo").value);
-  const v = parseFloat(document.getElementById("limitVermelho").value);
-  if (isNaN(a) || isNaN(v)) { showToast("Preencha ambos os limites.", "err"); return; }
-  if (a >= v) { showToast("Amarelo deve ser menor que Vermelho.", "err"); return; }
+// Limites
+document.getElementById('btnLimites').addEventListener('click', async () => {
+  const a = parseFloat(document.getElementById('limitAmarelo').value);
+  const v = parseFloat(document.getElementById('limitVermelho').value);
+  if (isNaN(a) || isNaN(v)) { showToast('Preencha ambos os limites.', 'err'); return; }
+  if (a >= v) { showToast('Amarelo deve ser menor que Vermelho.', 'err'); return; }
   await sendCommand(`LIMITES:${a.toFixed(1)},${v.toFixed(1)}`);
 });
 
-document.getElementById("btnConf").addEventListener("click", async () => {
-  await sendCommand(`CONFIRMACAO:${document.getElementById("selectConf").value}`);
+// Confirmação
+document.getElementById('btnConf').addEventListener('click', async () => {
+  const estado = document.getElementById('selectConf').value;
+  await sendCommand(`CONFIRMACAO:${estado}`);
 });
 
-document.getElementById("btnNome").addEventListener("click", async () => {
-  const nome = document.getElementById("deviceName").value.trim();
-  if (!nome) { showToast("Digite um nome válido.", "err"); return; }
+// Nome
+document.getElementById('btnNome').addEventListener('click', async () => {
+  const nome = document.getElementById('deviceName').value.trim();
+  if (!nome) { showToast('Digite um nome válido.', 'err'); return; }
   await sendCommand(`NOME:${nome}`);
 });
 
-document.getElementById("btnNovaSenha").addEventListener("click", async () => {
-  const pw1 = document.getElementById("newPassword").value;
-  const pw2 = document.getElementById("confirmPassword").value;
-  if (pw1.length < 4) { showToast("Mínimo 4 caracteres.", "err"); return; }
-  if (pw1 !== pw2)    { showToast("As senhas não coincidem.", "err"); return; }
+// Nova senha (com confirmação)
+document.getElementById('btnNovaSenha').addEventListener('click', async () => {
+  const pw1 = document.getElementById('newPassword').value;
+  const pw2 = document.getElementById('confirmPassword').value;
+  if (pw1.length < 4) { showToast('Mínimo 4 caracteres.', 'err'); return; }
+  if (pw1 !== pw2)    { showToast('As senhas não coincidem.', 'err'); return; }
   await sendCommand(`ALTERARSENHA:${pw1}`);
 });
 
-// ──────────────────────────────────────────
-// Init
-// ──────────────────────────────────────────
-renderProfileList();
-applyColors(loadColors());
+// Auto-config — lógica de timer e cálculo 100% client-side
+btnAutoconfig.addEventListener('click', async () => {
+  if (autoconfigActive) return;
+
+  // Envia AUTOCONFIG ao firmware para resetar EMA e iniciar janela limpa de leitura
+  const ok = await sendCommand('AUTOCONFIG');
+  if (!ok) return;
+
+  autoconfigActive = true;
+  autoconfigPeak   = 0;
+  autoconfigStatus.textContent = '';
+  autoconfigBarWrap.classList.remove('hidden');
+  autoconfigBar.style.width = '0%';
+  btnAutoconfig.disabled = true;
+  btnAutoconfig.textContent = 'Calibrando…';
+
+  const TOTAL_MS  = 10000;
+  const startedAt = Date.now();
+
+  // Timer client-side: atualiza barra e countdown a cada 200ms
+  autoconfigTimer = setInterval(() => {
+    const elapsed  = Date.now() - startedAt;
+    const pct      = Math.min((elapsed / TOTAL_MS) * 100, 100);
+    const secLeft  = Math.max(Math.ceil((TOTAL_MS - elapsed) / 1000), 0);
+
+    autoconfigBar.style.width = pct + '%';
+    autoconfigStatus.textContent =
+      `⏱ Analisando... ${secLeft}s restantes   |   Pico atual: ${Math.round(autoconfigPeak)}`;
+
+    if (elapsed >= TOTAL_MS) {
+      clearInterval(autoconfigTimer);
+      applyAutoconfigResult();   // Calcula e aplica os limites
+    }
+  }, 200);
+});
 </script>
 </body>
 </html>
