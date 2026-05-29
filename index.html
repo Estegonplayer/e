@@ -56,7 +56,7 @@
       width: 10px; height: 10px;
       border-radius: 50%;
     }
-    .dot-r { background: var(--red);   box-shadow: 0 0 6px var(--red); }
+    .dot-r { background: var(--red); box-shadow: 0 0 6px var(--red); }
     .dot-y { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
     .dot-g { background: var(--green); box-shadow: 0 0 6px var(--green); }
 
@@ -105,10 +105,9 @@
       border-radius: 4px;
       font-weight: 600;
     }
-    .badge-off  { background: #1f1215; color: var(--red);    border: 1px solid #3d1515; }
-    .badge-on   { background: #0f231a; color: var(--green);  border: 1px solid #1a4d2e; }
-    .badge-auth { background: #13152b; color: var(--accent); border: 1px solid #2d3070; }
-    .badge-saved{ background: #0c2012; color: #4ade80;       border: 1px solid #166534; }
+    .badge-off  { background: #1f1215; color: var(--red);   border: 1px solid #3d1515; }
+    .badge-on   { background: #0f231a; color: var(--green); border: 1px solid #1a4d2e; }
+    .badge-auth { background: #13152b; color: var(--accent);border: 1px solid #2d3070; }
 
     .card-body { padding: 18px; }
 
@@ -154,8 +153,6 @@
     .btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
     .btn-cyan     { background: #0c2a33; color: var(--cyan); border: 1px solid #0e4d5e; }
     .btn-cyan:hover:not(:disabled) { background: #103542; }
-    .btn-green    { background: #0f231a; color: var(--green); border: 1px solid #1a4d2e; }
-    .btn-green:hover:not(:disabled) { background: #12301f; }
     .btn-full { width: 100%; margin-top: 10px; padding: 12px; }
 
     /* ── Form elements ── */
@@ -237,57 +234,25 @@
       border-radius: 3px;
     }
     .limit-tag.amarelo { background: #2d220a; color: var(--amber); }
-    .limit-tag.vermelho { background: #1f0808; color: var(--red); }
+    .limit-tag.vermelho { background: #1f0808; color: var(--red);   }
 
-    /* Painel duplo: valor suavizado + pico 5s */
-    .values-row {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .value-block { text-align: center; }
     .chart-value {
       font-family: var(--mono);
       font-size: 2rem;
       font-weight: 600;
       color: var(--green);
       transition: color 0.3s;
+      text-align: center;
       line-height: 1;
     }
     .chart-value.warn  { color: var(--amber); }
-    .chart-value.alert { color: var(--red); }
-    .chart-value.sm    { font-size: 1.2rem; }
+    .chart-value.alert { color: var(--red);   }
     .chart-label {
       font-family: var(--mono);
       font-size: 0.68rem;
       color: var(--text-muted);
+      text-align: center;
       margin-top: 2px;
-    }
-    .peak-bar-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .peak-bar-track {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      height: 8px;
-      overflow: hidden;
-    }
-    .peak-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--green);
-      transition: width 0.18s linear, background 0.3s;
-      border-radius: 4px;
-    }
-    .peak-bar-label {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--text-muted);
     }
 
     /* ── Auto-config ── */
@@ -312,63 +277,6 @@
       color: var(--cyan);
       margin-top: 6px;
       min-height: 1.2em;
-    }
-
-    /* ── Seletor de cores ── */
-    .color-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-    .color-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-    .color-item label {
-      text-align: center;
-      font-size: 0.68rem;
-      margin-bottom: 0;
-      letter-spacing: 0;
-    }
-    .color-swatch {
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      border: 2px solid var(--border);
-      cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .color-swatch:hover { transform: scale(1.08); border-color: var(--text-muted); }
-    .color-swatch input[type="color"] {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      opacity: 0;
-      cursor: pointer;
-      padding: 0; border: none;
-    }
-    .color-dot {
-      width: 100%; height: 100%;
-      border-radius: 6px;
-      pointer-events: none;
-    }
-
-    /* ── Perfil ── */
-    .profile-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    #profileTimestamp {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-      min-height: 1.1em;
     }
 
     /* ── Divider ── */
@@ -411,7 +319,7 @@
   </div>
   <div class="header-title">
     <h1>E-silent</h1>
-    <p>Painel de Configuração v2.1</p>
+    <p>Painel de Configuração</p>
   </div>
 </div>
 
@@ -457,38 +365,17 @@
     <span class="badge badge-on" id="liveBadge">● AO VIVO</span>
   </div>
   <div class="card-body">
-
-    <!-- Painel de valores: suavizado + pico 5s -->
-    <div class="values-row">
-      <div class="value-block">
-        <div class="chart-value sm" id="liveValueSmooth">0</div>
-        <div class="chart-label">suavizado</div>
+    <div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">
+      <div>
+        <div class="chart-value" id="liveValue">0</div>
+        <div class="chart-label">intensidade atual</div>
       </div>
-      <div class="value-block">
-        <div class="chart-value" id="liveValuePeak">0</div>
-        <div class="chart-label">pico 5s ← alerta</div>
-      </div>
-      <div class="peak-bar-wrap">
-        <div class="peak-bar-label">pico 5s vs limites</div>
-        <div style="display:flex;flex-direction:column;gap:4px;">
-          <div>
-            <div class="peak-bar-label" style="color:var(--red)">vermelho</div>
-            <div class="peak-bar-track"><div class="peak-bar-fill" id="barVermelho"></div></div>
-          </div>
-          <div>
-            <div class="peak-bar-label" style="color:var(--amber)">amarelo</div>
-            <div class="peak-bar-track"><div class="peak-bar-fill" id="barAmarelo" style="background:var(--amber)"></div></div>
-          </div>
+      <div class="chart-wrap" style="flex:1; margin-bottom:0;">
+        <canvas id="audioChart"></canvas>
+        <div class="chart-limits">
+          <span class="limit-tag vermelho" id="tagVermelho">V: —</span>
+          <span class="limit-tag amarelo" id="tagAmarelo">A: —</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Gráfico -->
-    <div class="chart-wrap">
-      <canvas id="audioChart"></canvas>
-      <div class="chart-limits">
-        <span class="limit-tag vermelho" id="tagVermelho">V: —</span>
-        <span class="limit-tag amarelo"  id="tagAmarelo">A: —</span>
       </div>
     </div>
 
@@ -496,13 +383,12 @@
 
     <!-- Auto-config -->
     <div class="field">
-      <label>Calibração Automática (30s)</label>
+      <label>Calibração Automática</label>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
-        Fale em volume <strong style="color:var(--text)">normal de trabalho</strong> durante
-        <strong style="color:var(--text)">30 segundos</strong>. O sistema mede o pico sustentado
-        da sua voz e define: <span style="color:var(--amber)">Amarelo = +30%</span> e
-        <span style="color:var(--red)">Vermelho = +70%</span> acima desse pico.
-        Impactos isolados são descartados automaticamente.
+        Fale no volume normal de trabalho durante <strong style="color:var(--text)">10 segundos</strong>.
+        O painel captura o pico da sua voz e define o <span style="color:var(--red)">limite vermelho</span> em
+        <strong style="color:var(--text)">+10% acima desse pico</strong>, e o
+        <span style="color:var(--amber)">amarelo</span> em 80% do vermelho.
       </p>
       <button class="btn btn-cyan btn-full" id="btnAutoconfig" disabled>Iniciar Calibração Automática</button>
       <div class="autoconfig-bar-wrap hidden" id="autoconfigBarWrap">
@@ -523,14 +409,14 @@
 
     <!-- Limites -->
     <div class="field">
-      <label>Limites de Intensidade (pico 5s)</label>
+      <label>Limites de Intensidade</label>
       <div class="form-row">
         <div>
-          <label style="color:var(--amber)">▲ Amarelo (atenção)</label>
+          <label style="color:var(--amber)">▲ Amarelo</label>
           <input type="number" id="limitAmarelo" placeholder="2300">
         </div>
         <div>
-          <label style="color:var(--red)">▲ Vermelho (alerta)</label>
+          <label style="color:var(--red)">▲ Vermelho</label>
           <input type="number" id="limitVermelho" placeholder="2500">
         </div>
       </div>
@@ -564,44 +450,6 @@
 
     <hr class="divider">
 
-    <!-- Cores dos Alertas -->
-    <div class="field">
-      <label>Cores dos Alertas (painel)</label>
-      <div class="color-grid">
-        <div class="color-item">
-          <div class="color-swatch" id="swatchVerde">
-            <div class="color-dot" id="dotVerde"></div>
-            <input type="color" id="colorVerde" value="#22c55e">
-          </div>
-          <label>Normal</label>
-        </div>
-        <div class="color-item">
-          <div class="color-swatch" id="swatchAmarelo">
-            <div class="color-dot" id="dotAmarelo"></div>
-            <input type="color" id="colorAmarelo" value="#f59e0b">
-          </div>
-          <label>Atenção</label>
-        </div>
-        <div class="color-item">
-          <div class="color-swatch" id="swatchVermelho">
-            <div class="color-dot" id="dotVermelho"></div>
-            <input type="color" id="colorVermelho" value="#ef4444">
-          </div>
-          <label>Alerta</label>
-        </div>
-        <div class="color-item">
-          <div class="color-swatch" id="swatchCiano">
-            <div class="color-dot" id="dotCiano"></div>
-            <input type="color" id="colorCiano" value="#06b6d4">
-          </div>
-          <label>Calibração</label>
-        </div>
-      </div>
-      <button class="btn btn-outline btn-full" id="btnResetCores" style="margin-top:10px">↺ Restaurar Cores Padrão</button>
-    </div>
-
-    <hr class="divider">
-
     <!-- Troca de senha -->
     <div class="field">
       <label>Alterar Senha (mín. 4 caracteres)</label>
@@ -621,33 +469,6 @@
   </div>
 </div>
 
-<!-- ── Perfil & Exportação ── -->
-<div class="card" id="profileCard">
-  <div class="card-header">
-    <span>Perfil de Configuração</span>
-    <span class="badge badge-off" id="profileBadge">SEM PERFIL</span>
-  </div>
-  <div class="card-body">
-    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px; line-height:1.5;">
-      Salve os limites, travamento, nome e cores do formulário. Importe em outro navegador
-      ou envie a outro dispositivo com <strong style="color:var(--text)">Aplicar ao Dispositivo</strong>.
-    </p>
-
-    <div class="profile-actions">
-      <button class="btn btn-outline" id="btnSalvarPerfil">💾 Salvar no Navegador</button>
-      <button class="btn btn-outline" id="btnCarregarPerfil">📂 Carregar Perfil</button>
-      <button class="btn btn-outline" id="btnExportarJSON">⬇ Exportar .json</button>
-      <label class="btn btn-outline" style="text-align:center; cursor:pointer; display:flex; align-items:center; justify-content:center;">
-        ⬆ Importar .json
-        <input type="file" id="importFile" accept=".json" style="display:none">
-      </label>
-    </div>
-
-    <button class="btn btn-green btn-full" id="btnAplicarPerfil" disabled>⚡ Aplicar Perfil ao Dispositivo</button>
-    <div id="profileTimestamp"></div>
-  </div>
-</div>
-
 <div id="toast"></div>
 
 <script>
@@ -657,30 +478,18 @@
 const SERVICE_UUID        = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
-// ──────────────────────────────────────────
-// Cores padrão
-// ──────────────────────────────────────────
-const DEFAULT_COLORS = {
-  verde:    "#22c55e",
-  amarelo:  "#f59e0b",
-  vermelho: "#ef4444",
-  ciano:    "#06b6d4"
-};
-
 // Estado global
 let bleDevice         = null;
 let bleCharacteristic = null;
 let isAuth            = false;
 let autoconfigActive   = false;
 let autoconfigTimer    = null;
-let autoconfigPeak     = 0;
+let autoconfigProgress = 0;
+let autoconfigPeak     = 0;   // Pico máximo capturado pelo HTML durante a janela de 10s
 
-// Limites atuais (populados do dispositivo após login ou do perfil)
-let currentAmarelo  = 0;
+// Limites (populados do dispositivo após login)
+let currentAmarelo = 0;
 let currentVermelho = 0;
-
-// Última leitura de pico 5s (para as barras)
-let lastRollingPeak = 0;
 
 // ──────────────────────────────────────────
 // Referências DOM
@@ -693,19 +502,13 @@ const authBadge     = document.getElementById('authBadge');
 const authCard      = document.getElementById('authCard');
 const chartCard     = document.getElementById('chartCard');
 const configCard    = document.getElementById('configCard');
-const liveValueSmooth = document.getElementById('liveValueSmooth');
-const liveValuePeak   = document.getElementById('liveValuePeak');
+const liveValue     = document.getElementById('liveValue');
 const tagAmarelo    = document.getElementById('tagAmarelo');
 const tagVermelho   = document.getElementById('tagVermelho');
 const btnAutoconfig = document.getElementById('btnAutoconfig');
 const autoconfigBarWrap = document.getElementById('autoconfigBarWrap');
 const autoconfigBar = document.getElementById('autoconfigBar');
 const autoconfigStatus = document.getElementById('autoconfigStatus');
-const barVermelho   = document.getElementById('barVermelho');
-const barAmarelo    = document.getElementById('barAmarelo');
-const profileBadge  = document.getElementById('profileBadge');
-const profileTimestamp = document.getElementById('profileTimestamp');
-const btnAplicarPerfil = document.getElementById('btnAplicarPerfil');
 
 // ──────────────────────────────────────────
 // Toast
@@ -728,86 +531,6 @@ function togglePw(inputId, btn) {
   inp.type   = show ? 'text' : 'password';
   btn.textContent = show ? '🙈' : '👁';
 }
-
-// ──────────────────────────────────────────
-// Cores — aplicar, salvar, restaurar
-// ──────────────────────────────────────────
-function applyColors(colors) {
-  document.documentElement.style.setProperty('--green',   colors.verde);
-  document.documentElement.style.setProperty('--amber',   colors.amarelo);
-  document.documentElement.style.setProperty('--red',     colors.vermelho);
-  document.documentElement.style.setProperty('--cyan',    colors.ciano);
-
-  // Atualiza swatches
-  document.getElementById('dotVerde').style.background    = colors.verde;
-  document.getElementById('dotAmarelo').style.background  = colors.amarelo;
-  document.getElementById('dotVermelho').style.background = colors.vermelho;
-  document.getElementById('dotCiano').style.background    = colors.ciano;
-
-  document.getElementById('colorVerde').value    = colors.verde;
-  document.getElementById('colorAmarelo').value  = colors.amarelo;
-  document.getElementById('colorVermelho').value = colors.vermelho;
-  document.getElementById('colorCiano').value    = colors.ciano;
-
-  // Atualiza gráfico
-  if (audioChart) {
-    audioChart.data.datasets[1].borderColor = hexToRgba(colors.amarelo, 0.6);
-    audioChart.data.datasets[2].borderColor = hexToRgba(colors.vermelho, 0.6);
-    audioChart.update('none');
-  }
-
-  // Atualiza dots do header
-  document.querySelector('.dot-r').style.background  = colors.vermelho;
-  document.querySelector('.dot-r').style.boxShadow   = `0 0 6px ${colors.vermelho}`;
-  document.querySelector('.dot-y').style.background  = colors.amarelo;
-  document.querySelector('.dot-y').style.boxShadow   = `0 0 6px ${colors.amarelo}`;
-  document.querySelector('.dot-g').style.background  = colors.verde;
-  document.querySelector('.dot-g').style.boxShadow   = `0 0 6px ${colors.verde}`;
-
-  // Persiste no localStorage
-  localStorage.setItem('esilent_colors', JSON.stringify(colors));
-}
-
-function getCurrentColors() {
-  return {
-    verde:    document.getElementById('colorVerde').value,
-    amarelo:  document.getElementById('colorAmarelo').value,
-    vermelho: document.getElementById('colorVermelho').value,
-    ciano:    document.getElementById('colorCiano').value,
-  };
-}
-
-function hexToRgba(hex, alpha) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-// Carrega cores salvas ao iniciar
-(function loadSavedColors() {
-  const saved = localStorage.getItem('esilent_colors');
-  if (saved) {
-    try { applyColors(JSON.parse(saved)); } catch {}
-  } else {
-    applyColors(DEFAULT_COLORS);
-  }
-})();
-
-// Event listeners dos color pickers
-['Verde','Amarelo','Vermelho','Ciano'].forEach(nome => {
-  const input = document.getElementById('color' + nome);
-  const dot   = document.getElementById('dot'   + nome);
-  input.addEventListener('input', () => {
-    dot.style.background = input.value;
-    applyColors(getCurrentColors());
-  });
-});
-
-document.getElementById('btnResetCores').addEventListener('click', () => {
-  applyColors(DEFAULT_COLORS);
-  showToast('✓ Cores restauradas ao padrão.');
-});
 
 // ──────────────────────────────────────────
 // Chart.js — Gráfico de Áudio ao Vivo
@@ -871,19 +594,12 @@ const audioChart = new Chart(chartCtx, {
   }
 });
 
-// ──────────────────────────────────────────
-// Atualiza gráfico e painéis com novo dado
-// smoothed = linha suave (para o gráfico)
-// peak     = pico 5s (para alertas e barras)
-// ──────────────────────────────────────────
-function pushChartValue(smoothed, peak) {
-  lastRollingPeak = peak;
-
-  // Linha do gráfico = valor suavizado
+function pushChartValue(val) {
   chartData.shift();
-  chartData.push(smoothed);
+  chartData.push(val);
   audioChart.data.datasets[0].data = [...chartData];
 
+  // Actualiza linhas de limite se mudaram
   if (audioChart.data.datasets[1].data[0] !== amareloLine) {
     audioChart.data.datasets[1].data = new Array(MAX_POINTS).fill(amareloLine);
   }
@@ -891,45 +607,24 @@ function pushChartValue(smoothed, peak) {
     audioChart.data.datasets[2].data = new Array(MAX_POINTS).fill(vermelhoLine);
   }
 
-  // Cor da linha baseada no PICO 5s (reflete o estado real de alerta)
-  const colors = getCurrentColors();
-  let lineColor = colors.verde;
-  if (peak >= vermelhoLine && vermelhoLine > 0) lineColor = colors.vermelho;
-  else if (peak >= amareloLine && amareloLine > 0) lineColor = colors.amarelo;
-  audioChart.data.datasets[0].borderColor      = lineColor;
-  audioChart.data.datasets[0].backgroundColor  = hexToRgba(lineColor, 0.07);
-  audioChart.data.datasets[1].borderColor      = hexToRgba(colors.amarelo,  0.6);
-  audioChart.data.datasets[2].borderColor      = hexToRgba(colors.vermelho, 0.6);
+  // Cor da linha principal baseada no estado
+  let color = '#22c55e';
+  if (val >= vermelhoLine && vermelhoLine > 0) color = '#ef4444';
+  else if (val >= amareloLine && amareloLine > 0) color = '#f59e0b';
+  audioChart.data.datasets[0].borderColor = color;
+  audioChart.data.datasets[0].backgroundColor = color.replace(')', ',0.07)').replace('rgb', 'rgba');
 
-  // Valor suavizado (menor, informativo)
-  liveValueSmooth.textContent = Math.round(smoothed);
-
-  // Valor do pico 5s (grande, é o que dispara alertas)
-  liveValuePeak.textContent = Math.round(peak);
-  liveValuePeak.className   = 'chart-value';
-  if (peak >= vermelhoLine && vermelhoLine > 0)       liveValuePeak.classList.add('alert');
-  else if (peak >= amareloLine && amareloLine > 0)    liveValuePeak.classList.add('warn');
-
-  // Barras de progresso
-  if (vermelhoLine > 0) {
-    const pctV = Math.min((peak / vermelhoLine) * 100, 100);
-    barVermelho.style.width      = pctV + '%';
-    barVermelho.style.background = peak >= vermelhoLine ? colors.vermelho : colors.verde;
-  }
-  if (amareloLine > 0) {
-    const pctA = Math.min((peak / amareloLine) * 100, 100);
-    barAmarelo.style.width       = pctA + '%';
-    barAmarelo.style.background  = peak >= amareloLine ? colors.amarelo : colors.verde;
-  }
+  // Valor numérico ao vivo
+  liveValue.textContent = Math.round(val);
+  liveValue.className = 'chart-value';
+  if (val >= vermelhoLine && vermelhoLine > 0) liveValue.classList.add('alert');
+  else if (val >= amareloLine && amareloLine > 0) liveValue.classList.add('warn');
 
   audioChart.update('none');
-
-  // Tracking client-side do pico durante calibração
-  if (autoconfigActive && peak > autoconfigPeak) autoconfigPeak = peak;
 }
 
 function updateLimitTags() {
-  tagAmarelo.textContent  = `A: ${Math.round(amareloLine)}`;
+  tagAmarelo.textContent = `A: ${Math.round(amareloLine)}`;
   tagVermelho.textContent = `V: ${Math.round(vermelhoLine)}`;
 }
 
@@ -955,9 +650,11 @@ async function connectDevice() {
     const service = await server.getPrimaryService(SERVICE_UUID);
     bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
+    // Ativa notificações BLE (necessário para o gráfico e respostas)
     await bleCharacteristic.startNotifications();
     bleCharacteristic.addEventListener('characteristicvaluechanged', handleNotification);
 
+    // UI: conectado
     statusText.textContent = `Conectado — ${bleDevice.name || 'E-silent'}`;
     statusDot.classList.add('on');
     connBadge.textContent = 'ONLINE';
@@ -992,7 +689,6 @@ function resetUI() {
   configCard.classList.add('hidden');
   authBadge.textContent = 'NÃO AUTENTICADO';
   authBadge.className   = 'badge badge-off';
-  btnAplicarPerfil.disabled = true;
   isAuth = false;
   bleDevice = null;
   bleCharacteristic = null;
@@ -1016,20 +712,18 @@ async function sendCommand(cmd) {
 
 // ──────────────────────────────────────────
 // BLE — Recepção de Notificações
-// Formato v2.1: DATA:smoothed,PEAK:rolling_peak[,CALIB:secs]
 // ──────────────────────────────────────────
 function handleNotification(event) {
   const raw = new TextDecoder().decode(event.target.value);
 
   // ── Dados de áudio ao vivo ──
   if (raw.startsWith('DATA:')) {
-    const parts = raw.split(',');
-    const smoothed = parseFloat(parts[0].substring(5)) || 0;
-    let peak = smoothed; // fallback para firmware v2.0 sem PEAK
-    for (const p of parts) {
-      if (p.startsWith('PEAK:')) { peak = parseFloat(p.substring(5)) || 0; break; }
+    const val = parseFloat(raw.substring(5).split(',')[0]);
+    if (!isNaN(val)) {
+      pushChartValue(val);
+      // Tracking de pico client-side durante calibração (ignora CALIB: do firmware)
+      if (autoconfigActive && val > autoconfigPeak) autoconfigPeak = val;
     }
-    pushChartValue(smoothed, peak);
     return;
   }
 
@@ -1042,60 +736,60 @@ function handleNotification(event) {
     document.getElementById('selectConf').value    = conf || 'LIGADO';
     amareloLine  = fA;
     vermelhoLine = fV;
-    currentAmarelo  = fA;
+    currentAmarelo = fA;
     currentVermelho = fV;
     updateLimitTags();
     audioChart.options.scales.y.suggestedMax = fV * 1.3;
     return;
   }
 
-  if (raw === 'AUTH_FAIL') { showToast('Senha incorreta.', 'err'); return; }
-  if (raw === 'NOT_AUTH')  { showToast('Não autenticado.', 'err'); return; }
+  // ── Autenticação: senha errada ──
+  if (raw === 'AUTH_FAIL') {
+    showToast('Senha incorreta.', 'err');
+    return;
+  }
 
+  // ── Não autenticado ──
+  if (raw === 'NOT_AUTH') {
+    showToast('Não autenticado.', 'err');
+    return;
+  }
+
+  // ── Respostas OK ──
   if (raw === 'OK:LIMITES') {
+    showToast('✓ Limites salvos!');
+    // Atualiza linhas do gráfico
     amareloLine  = parseFloat(document.getElementById('limitAmarelo').value);
     vermelhoLine = parseFloat(document.getElementById('limitVermelho').value);
-    currentAmarelo  = amareloLine;
-    currentVermelho = vermelhoLine;
     updateLimitTags();
-    showToast('✓ Limites salvos!');
     return;
   }
   if (raw === 'OK:NOME')    { showToast('✓ Nome salvo! Aplica no boot.'); return; }
-  if (raw === 'OK:SENHA')   {
-    showToast('✓ Senha alterada!');
-    document.getElementById('newPassword').value      = '';
-    document.getElementById('confirmPassword').value  = '';
-    return;
-  }
-  if (raw === 'OK:CONFIRMACAO')  { showToast('✓ Travamento salvo!'); return; }
+  if (raw === 'OK:SENHA')   { showToast('✓ Senha alterada!'); document.getElementById('newPassword').value = ''; document.getElementById('confirmPassword').value = ''; return; }
+  if (raw === 'OK:CONFIRMACAO') { showToast('✓ Comportamento de travamento salvo!'); return; }
   if (raw === 'ERR:SENHA_CURTA') { showToast('Senha muito curta (mín. 4).', 'err'); return; }
 
-  // AUTOCONFIG_DONE: firmware confirmou e salvou — não recalculamos, pois o painel
-  // já fez o cálculo e enviou via LIMITES. Apenas notificamos.
-  if (raw.startsWith('AUTOCONFIG_DONE:')) { showToast('✓ Calibração confirmada pelo dispositivo!'); return; }
-  if (raw === 'AUTOCONFIG_FAIL')          { showToast('Sinal muito baixo no dispositivo.', 'err'); return; }
+  // Firmware AUTOCONFIG_START/DONE/FAIL são ignorados: cálculo é 100% client-side
 }
 
 // ──────────────────────────────────────────
-// Auto-config — lógica 100% client-side (30s)
-// Pico é capturado de rolling_peak recebido via PEAK:
-// Amarelo = pico × 1.30 | Vermelho = pico × 1.70
+// Auto-config helpers
 // ──────────────────────────────────────────
 function applyAutoconfigResult() {
+  // Cálculo 100% client-side: vermelho = pico + 10%, amarelo = 80% do vermelho
   if (autoconfigPeak < 30) {
     finishAutoconfig(false, null);
     showToast('Sinal muito baixo — fale mais alto durante a calibração.', 'err');
     return;
   }
-  const fV = autoconfigPeak * 1.70;   // +70% acima do pico de voz normal
-  const fA = autoconfigPeak * 1.30;   // +30% acima do pico de voz normal
+  const fV = autoconfigPeak * 1.10;
+  const fA = fV * 0.80;
 
-  document.getElementById('limitAmarelo').value  = Math.round(fA);
+  document.getElementById('limitAmarelo').value = Math.round(fA);
   document.getElementById('limitVermelho').value = Math.round(fV);
   amareloLine  = fA;
   vermelhoLine = fV;
-  currentAmarelo  = fA;
+  currentAmarelo = fA;
   currentVermelho = fV;
   updateLimitTags();
   audioChart.options.scales.y.suggestedMax = fV * 1.3;
@@ -1110,140 +804,23 @@ function finishAutoconfig(success, result) {
   clearInterval(autoconfigTimer);
   autoconfigBarWrap.classList.add('hidden');
   autoconfigBar.style.width = '0%';
-  btnAutoconfig.disabled    = false;
+  btnAutoconfig.disabled = false;
   btnAutoconfig.textContent = 'Iniciar Calibração Automática';
 
-  if (!success || !result) { autoconfigStatus.textContent = ''; return; }
+  if (!success || !result) {
+    autoconfigStatus.textContent = '';
+    return;
+  }
   autoconfigStatus.innerHTML =
-    `<span style="color:var(--green)">✓ Pico 5s capturado: <strong>${Math.round(result.peak)}</strong></span>` +
+    `<span style="color:var(--green)">✓ Pico capturado: <strong>${Math.round(result.peak)}</strong></span>` +
     ` &nbsp;→&nbsp; ` +
     `<span style="color:var(--amber)">Amarelo: <strong>${Math.round(result.amarelo)}</strong></span>` +
     ` &nbsp;|&nbsp; ` +
     `<span style="color:var(--red)">Vermelho: <strong>${Math.round(result.vermelho)}</strong></span>`;
 }
 
+// Alias mantido para resetUI chamar sem quebrar
 function stopAutoconfig() { finishAutoconfig(false, null); }
-
-// ──────────────────────────────────────────
-// Perfil — salvar, carregar, exportar, importar
-// ──────────────────────────────────────────
-function buildCurrentProfile() {
-  return {
-    version:       "2.1",
-    savedAt:       new Date().toISOString(),
-    limitAmarelo:  parseFloat(document.getElementById('limitAmarelo').value)  || currentAmarelo,
-    limitVermelho: parseFloat(document.getElementById('limitVermelho').value) || currentVermelho,
-    confirmacao:   document.getElementById('selectConf').value,
-    deviceName:    document.getElementById('deviceName').value.trim(),
-    colors:        getCurrentColors(),
-  };
-}
-
-function applyProfileToForm(profile) {
-  if (profile.limitAmarelo)  document.getElementById('limitAmarelo').value  = Math.round(profile.limitAmarelo);
-  if (profile.limitVermelho) document.getElementById('limitVermelho').value = Math.round(profile.limitVermelho);
-  if (profile.confirmacao)   document.getElementById('selectConf').value    = profile.confirmacao;
-  if (profile.deviceName)    document.getElementById('deviceName').value    = profile.deviceName;
-  if (profile.colors)        applyColors(profile.colors);
-  amareloLine  = profile.limitAmarelo  || amareloLine;
-  vermelhoLine = profile.limitVermelho || vermelhoLine;
-  currentAmarelo  = amareloLine;
-  currentVermelho = vermelhoLine;
-  updateLimitTags();
-  if (audioChart) {
-    audioChart.options.scales.y.suggestedMax = vermelhoLine * 1.3;
-    audioChart.update('none');
-  }
-}
-
-function updateProfileBadge(profile) {
-  if (!profile) {
-    profileBadge.textContent = 'SEM PERFIL';
-    profileBadge.className   = 'badge badge-off';
-    profileTimestamp.textContent = '';
-    return;
-  }
-  profileBadge.textContent = 'SALVO';
-  profileBadge.className   = 'badge badge-saved';
-  const d = new Date(profile.savedAt);
-  profileTimestamp.textContent =
-    `Salvo em ${d.toLocaleDateString('pt-BR')} às ${d.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'})}` +
-    ` — Amarelo: ${Math.round(profile.limitAmarelo)} | Vermelho: ${Math.round(profile.limitVermelho)}`;
-}
-
-// Verifica perfil salvo ao iniciar
-(function checkSavedProfile() {
-  const saved = localStorage.getItem('esilent_profile');
-  if (saved) {
-    try { updateProfileBadge(JSON.parse(saved)); } catch {}
-  }
-})();
-
-document.getElementById('btnSalvarPerfil').addEventListener('click', () => {
-  const profile = buildCurrentProfile();
-  localStorage.setItem('esilent_profile', JSON.stringify(profile));
-  updateProfileBadge(profile);
-  showToast('✓ Perfil salvo no navegador!');
-});
-
-document.getElementById('btnCarregarPerfil').addEventListener('click', () => {
-  const saved = localStorage.getItem('esilent_profile');
-  if (!saved) { showToast('Nenhum perfil salvo ainda.', 'err'); return; }
-  try {
-    const profile = JSON.parse(saved);
-    applyProfileToForm(profile);
-    updateProfileBadge(profile);
-    showToast('✓ Perfil carregado no formulário!');
-  } catch { showToast('Perfil corrompido.', 'err'); }
-});
-
-document.getElementById('btnExportarJSON').addEventListener('click', () => {
-  const profile = buildCurrentProfile();
-  const blob = new Blob([JSON.stringify(profile, null, 2)], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  const date = new Date().toISOString().split('T')[0];
-  a.href     = url;
-  a.download = `esilent_perfil_${date}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('✓ Arquivo exportado!');
-});
-
-document.getElementById('importFile').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    try {
-      const profile = JSON.parse(ev.target.result);
-      applyProfileToForm(profile);
-      updateProfileBadge(profile);
-      showToast('✓ Perfil importado e aplicado ao formulário!');
-    } catch { showToast('Arquivo inválido ou corrompido.', 'err'); }
-  };
-  reader.readAsText(file);
-  e.target.value = ''; // permite reimportar o mesmo arquivo
-});
-
-btnAplicarPerfil.addEventListener('click', async () => {
-  if (!isAuth) { showToast('Autentique-se primeiro.', 'err'); return; }
-  const saved = localStorage.getItem('esilent_profile');
-  if (!saved) { showToast('Nenhum perfil salvo.', 'err'); return; }
-  try {
-    const profile = JSON.parse(saved);
-    // Aplica ao formulário primeiro
-    applyProfileToForm(profile);
-    // Envia para o dispositivo com delays entre comandos
-    const ok1 = await sendCommand(`LIMITES:${profile.limitAmarelo.toFixed(1)},${profile.limitVermelho.toFixed(1)}`);
-    if (!ok1) return;
-    await new Promise(r => setTimeout(r, 350));
-    await sendCommand(`CONFIRMACAO:${profile.confirmacao}`);
-    await new Promise(r => setTimeout(r, 350));
-    if (profile.deviceName) await sendCommand(`NOME:${profile.deviceName}`);
-    showToast('✓ Perfil aplicado ao dispositivo!');
-  } catch { showToast('Erro ao aplicar perfil.', 'err'); }
-});
 
 // ──────────────────────────────────────────
 // Event Listeners de Ações
@@ -1257,13 +834,14 @@ document.getElementById('btnLogin').addEventListener('click', async () => {
   const ok = await sendCommand(`LOGIN:${pass}`);
   if (!ok) return;
 
+  // A resposta CONFIG: chega via notificação.
+  // Enquanto aguardamos, mostramos as seções.
   isAuth = true;
   authBadge.textContent = 'AUTENTICADO';
   authBadge.className   = 'badge badge-auth';
   chartCard.classList.remove('hidden');
   configCard.classList.remove('hidden');
-  btnAutoconfig.disabled    = false;
-  btnAplicarPerfil.disabled = false;
+  btnAutoconfig.disabled = false;
   document.getElementById('password').value = '';
 });
 
@@ -1278,7 +856,8 @@ document.getElementById('btnLimites').addEventListener('click', async () => {
 
 // Confirmação
 document.getElementById('btnConf').addEventListener('click', async () => {
-  await sendCommand(`CONFIRMACAO:${document.getElementById('selectConf').value}`);
+  const estado = document.getElementById('selectConf').value;
+  await sendCommand(`CONFIRMACAO:${estado}`);
 });
 
 // Nome
@@ -1288,7 +867,7 @@ document.getElementById('btnNome').addEventListener('click', async () => {
   await sendCommand(`NOME:${nome}`);
 });
 
-// Nova senha
+// Nova senha (com confirmação)
 document.getElementById('btnNovaSenha').addEventListener('click', async () => {
   const pw1 = document.getElementById('newPassword').value;
   const pw2 = document.getElementById('confirmPassword').value;
@@ -1297,10 +876,11 @@ document.getElementById('btnNovaSenha').addEventListener('click', async () => {
   await sendCommand(`ALTERARSENHA:${pw1}`);
 });
 
-// Auto-config — 30 segundos, pico de rolling_peak (via PEAK: nas notificações)
+// Auto-config — lógica de timer e cálculo 100% client-side
 btnAutoconfig.addEventListener('click', async () => {
   if (autoconfigActive) return;
 
+  // Envia AUTOCONFIG ao firmware para resetar EMA e iniciar janela limpa de leitura
   const ok = await sendCommand('AUTOCONFIG');
   if (!ok) return;
 
@@ -1308,25 +888,26 @@ btnAutoconfig.addEventListener('click', async () => {
   autoconfigPeak   = 0;
   autoconfigStatus.textContent = '';
   autoconfigBarWrap.classList.remove('hidden');
-  autoconfigBar.style.width    = '0%';
-  btnAutoconfig.disabled       = true;
-  btnAutoconfig.textContent    = 'Calibrando…';
+  autoconfigBar.style.width = '0%';
+  btnAutoconfig.disabled = true;
+  btnAutoconfig.textContent = 'Calibrando…';
 
-  const TOTAL_MS  = 30000;
+  const TOTAL_MS  = 10000;
   const startedAt = Date.now();
 
+  // Timer client-side: atualiza barra e countdown a cada 200ms
   autoconfigTimer = setInterval(() => {
-    const elapsed = Date.now() - startedAt;
-    const pct     = Math.min((elapsed / TOTAL_MS) * 100, 100);
-    const secLeft = Math.max(Math.ceil((TOTAL_MS - elapsed) / 1000), 0);
+    const elapsed  = Date.now() - startedAt;
+    const pct      = Math.min((elapsed / TOTAL_MS) * 100, 100);
+    const secLeft  = Math.max(Math.ceil((TOTAL_MS - elapsed) / 1000), 0);
 
     autoconfigBar.style.width = pct + '%';
     autoconfigStatus.textContent =
-      `⏱ Fale normalmente… ${secLeft}s restantes   |   Pico 5s atual: ${Math.round(lastRollingPeak)}`;
+      `⏱ Analisando... ${secLeft}s restantes   |   Pico atual: ${Math.round(autoconfigPeak)}`;
 
     if (elapsed >= TOTAL_MS) {
       clearInterval(autoconfigTimer);
-      applyAutoconfigResult();
+      applyAutoconfigResult();   // Calcula e aplica os limites
     }
   }, 200);
 });
