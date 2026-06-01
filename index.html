@@ -1082,10 +1082,10 @@ async function connectBLE() {
   try {
     toast('🔍 Procurando NoiseBox...', 'info', 8000);
 
-    bleDevice = await navigator.bluetooth.requestDevice({
-      filters: [{ services: [UUID.service] }],
-      optionalServices: [UUID.service]
-    });
+bleDevice = await navigator.bluetooth.requestDevice({
+  acceptAllDevices: true,
+  optionalServices: [UUID.service]
+});
 
     bleDevice.addEventListener('gattserverdisconnected', onDisconnected);
 
