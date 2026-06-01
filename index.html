@@ -1,347 +1,797 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Caixinha de Escritório – Configuração BLE</title>
-  <style>
-    :root{
-      --bg:#0f1115; --card:#171b21; --muted:#8b95a7; --text:#eef2f7; --line:#293241;
-      --accent:#6aa9ff; --good:#59d38c; --warn:#ffcc66; --bad:#ff6b6b;
-    }
-    body{margin:0;background:linear-gradient(180deg,#0b0d11,#11151c);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    .wrap{max-width:1040px;margin:0 auto;padding:24px}
-    .hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px}
-    h1{font-size:28px;margin:0}
-    .sub{color:var(--muted);margin-top:6px}
-    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#12161d;border-radius:999px;padding:10px 14px;color:var(--muted);font-size:14px}
-    .pill b{color:var(--text)}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-    .card{grid-column:span 12;background:rgba(23,27,33,.92);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 16px 40px rgba(0,0,0,.22)}
-    @media (min-width:900px){
-      .card.half{grid-column:span 6}
-      .card.third{grid-column:span 4}
-    }
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:720px){.row{grid-template-columns:1fr}}
-    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    input,button,textarea,select{
-      width:100%;box-sizing:border-box;border-radius:12px;border:1px solid var(--line);
-      background:#0f1319;color:var(--text);padding:12px 14px;font-size:15px;outline:none
-    }
-    input[type="color"]{padding:0;height:46px}
-    textarea{min-height:150px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
-    button{cursor:pointer;background:linear-gradient(180deg,#1f2a38,#18212c);transition:.15s transform,.15s opacity}
-    button:hover{transform:translateY(-1px)}
-    button.primary{background:linear-gradient(180deg,#2b6ef5,#2759c6);border-color:#2f67e0}
-    button.good{background:linear-gradient(180deg,#218d5d,#176c46);border-color:#1f8a58}
-    button.bad{background:linear-gradient(180deg,#a83a3a,#7e2727);border-color:#a24141}
-    .actions{display:flex;flex-wrap:wrap;gap:10px}
-    .actions button{width:auto;min-width:180px}
-    .status{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-    .box{background:#11161d;border:1px solid var(--line);border-radius:14px;padding:12px}
-    .box span{display:block;color:var(--muted);font-size:12px}
-    .box b{font-size:18px}
-    @media (max-width:900px){.status{grid-template-columns:repeat(2,minmax(0,1fr));}}
-    .small{font-size:13px;color:var(--muted);line-height:1.45}
-    .inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .inline > *{flex:1 1 180px}
-    .footer{margin-top:14px;color:var(--muted);font-size:12px}
-    code{background:#0d1117;padding:2px 6px;border-radius:6px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NoiseBox — Configuração BLE</title>
+<style>
+:root{
+  --bg:#0d0f13;
+  --card:#151921;
+  --card2:#10141b;
+  --line:#273041;
+  --text:#eef2f7;
+  --muted:#8a95a8;
+  --amber:#f5a623;
+  --blue:#4da6ff;
+  --green:#59d38c;
+  --red:#ff5c5c;
+  --yellow:#ffd166;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(circle at top, #171c25 0%, #0d0f13 45%, #090b0f 100%);
+  color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+header{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;
+  margin-bottom:18px;
+}
+h1{margin:0;font-size:28px}
+.sub{color:var(--muted);margin-top:6px}
+.badge{
+  border:1px solid var(--line);background:rgba(16,20,27,.92);border-radius:999px;
+  padding:10px 14px;font-size:14px;color:var(--muted)
+}
+.badge b{color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.card{
+  grid-column:span 12;
+  background:rgba(21,25,33,.95);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 18px 40px rgba(0,0,0,.24);
+}
+@media (min-width:900px){
+  .half{grid-column:span 6}
+  .third{grid-column:span 4}
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.row{grid-template-columns:1fr}}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input,button,textarea,select{
+  width:100%;border-radius:12px;border:1px solid var(--line);
+  background:var(--card2);color:var(--text);padding:12px 14px;font-size:15px;
+  outline:none;
+}
+button{cursor:pointer;transition:.15s transform,.15s opacity}
+button:hover{transform:translateY(-1px)}
+.primary{background:linear-gradient(180deg,#2d6df3,#2758c0);border-color:#3569e3}
+.good{background:linear-gradient(180deg,#238c5e,#17704a);border-color:#23855a}
+.soft{background:linear-gradient(180deg,#1e2632,#171d27)}
+.warn{background:linear-gradient(180deg,#a83a3a,#7c2626);border-color:#a44343}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions button{width:auto;min-width:160px}
+.small{font-size:13px;color:var(--muted);line-height:1.45}
+.status{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;
+}
+@media (max-width:900px){.status{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.box{background:#0f131a;border:1px solid var(--line);border-radius:14px;padding:12px}
+.box span{display:block;color:var(--muted);font-size:12px}
+.box b{font-size:18px}
+.pill{
+  display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);
+  background:#10141b;border-radius:999px;padding:10px 14px;color:var(--muted);
+}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);box-shadow:0 0 0 0 transparent}
+.pill.connected .dot{background:var(--green);box-shadow:0 0 10px rgba(89,211,140,.5)}
+.pill.authed .dot{background:var(--amber);box-shadow:0 0 10px rgba(245,166,35,.5)}
+.pill.stable .dot{background:var(--blue);box-shadow:0 0 10px rgba(77,166,255,.5)}
+.field{margin-bottom:14px}
+.slider{display:flex;gap:10px;align-items:center}
+.slider input[type=range]{padding:0;height:4px}
+.slider .val{min-width:72px;text-align:right;color:var(--amber);font-family:ui-monospace,Consolas,monospace}
+.colors{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.colorBox{display:flex;flex-direction:column;align-items:center;gap:6px}
+.colorPreview{
+  width:52px;height:52px;border-radius:14px;border:2px solid var(--line);
+  position:relative;overflow:hidden
+}
+.colorPreview input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.sectionTitle{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px
+}
+.sectionTitle::before{content:'';width:18px;height:1px;background:var(--amber)}
+.footer{
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  color:var(--muted);font-size:12px
+}
+textarea[readonly]{resize:vertical;min-height:120px;font-family:ui-monospace,Consolas,monospace}
+.kbd{font-family:ui-monospace,Consolas,monospace;background:#0e1218;border:1px solid var(--line);border-radius:8px;padding:2px 6px}
+.notice{
+  border:1px dashed #3a455c;background:#10141b;border-radius:14px;padding:12px;color:var(--muted);
+  font-size:13px;line-height:1.55
+}
+#toast{
+  position:fixed;right:20px;bottom:20px;max-width:360px;
+  background:#121822;border:1px solid var(--line);border-radius:14px;
+  padding:12px 14px;color:var(--text);opacity:0;transform:translateY(24px);
+  transition:all .25s ease;z-index:2000
+}
+#toast.show{opacity:1;transform:translateY(0)}
+#toast.ok{border-color:#2f8f5f;color:#aef2ca}
+#toast.err{border-color:#a63f3f;color:#ffb3b3}
+#toast.info{border-color:#4467a6;color:#c7dcff}
+.modalBack{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:1500
+}
+.modalBack.show{display:flex}
+.modal{
+  width:min(92vw,420px);background:#141922;border:1px solid var(--line);border-top:2px solid var(--amber);
+  border-radius:18px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.45)
+}
+.modal h2{margin:0 0 8px;font-size:20px}
+.modal p{margin:0 0 14px;color:var(--muted);line-height:1.55}
+.checkboxLine{display:flex;align-items:center;gap:10px;margin-top:10px;color:var(--muted);font-size:13px}
+.checkboxLine input{width:auto}
+@media (max-width:720px){.actions button{min-width:unset;width:100%}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div>
-        <h1>Caixinha de escritório – configuração BLE</h1>
-        <div class="sub">Conecta por Web Bluetooth, envia senha em SHA-256 e salva tudo na NVS da ESP32.</div>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>NoiseBox — configuração BLE</h1>
+      <div class="sub">Autenticação obrigatória, calibração salva e LEDs configuráveis.</div>
+    </div>
+    <div id="connBadge" class="pill"><span class="dot"></span><b id="connText">desc. off-line</b></div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="actions">
+        <button class="primary" id="btnConnect">Conectar BLE</button>
+        <button class="soft" id="btnRead">Ler configuração</button>
+        <button class="good" id="btnSave">Salvar</button>
+        <button class="soft" id="btnCalibrate">Calibrar ambiente</button>
+        <button class="soft" id="btnExport">Exportar</button>
+        <button class="soft" id="btnImport">Importar</button>
+        <button class="soft" id="btnShare">Compartilhar</button>
       </div>
-      <div class="pill">Estado: <b id="state">desconectado</b></div>
+      <div class="notice" style="margin-top:12px">
+        Use <span class="kbd">5 toques rápidos</span> no touch da caixinha para deixar o BLE visível.  
+        Segure <span class="kbd">5 s</span> no touch para limpar o alerta vermelho.  
+        O navegador pode sugerir salvar a senha se você marcar a opção de memorização.
+      </div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <div class="actions">
-          <button class="primary" id="btnConnect">Conectar BLE</button>
-          <button id="btnRead">Ler config do ESP32</button>
-          <button class="good" id="btnSave">Salvar no ESP32</button>
-          <button id="btnCalibrate">Calibrar ambiente</button>
-          <button class="bad" id="btnBleOn">Ativar visibilidade BLE</button>
-          <button class="bad" id="btnBleOff">Desativar visibilidade BLE</button>
+    <div class="card half">
+      <div class="sectionTitle">Segurança</div>
+      <form id="authForm" autocomplete="on">
+        <div class="field">
+          <label for="password">Senha de acesso</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Senha atual">
         </div>
-        <div class="footer">Abra esta página em <code>https://</code> ou <code>localhost</code>. No Chrome/Edge o Web Bluetooth precisa de contexto seguro.</div>
-      </div>
+        <div class="checkboxLine">
+          <input id="rememberPassword" type="checkbox">
+          <label for="rememberPassword" style="margin:0;color:var(--muted)">manter senha neste navegador</label>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div class="field">
+            <label for="deviceName">Nome do dispositivo</label>
+            <input id="deviceName" type="text" placeholder="NoiseBox">
+          </div>
+          <div class="field">
+            <label for="newPassword">Nova senha</label>
+            <input id="newPassword" type="password" autocomplete="new-password" placeholder="deixe em branco para manter">
+          </div>
+        </div>
+        <div class="field">
+          <button class="primary" type="button" id="btnAuth">Autenticar</button>
+        </div>
+      </form>
+    </div>
 
-      <div class="card half">
-        <h2>Segurança</h2>
-        <div class="row">
-          <div>
-            <label>Senha de acesso</label>
-            <input id="password" type="password" placeholder="Senha atual ou nova" />
-          </div>
-          <div>
-            <label>Nome do dispositivo</label>
-            <input id="deviceName" type="text" placeholder="CaixinhaSilencio" />
-          </div>
+    <div class="card half">
+      <div class="sectionTitle">Cores do LED</div>
+      <div class="colors">
+        <div class="colorBox">
+          <div class="colorPreview" id="prevIdle"><input type="color" id="colorIdle" value="#003c00"></div>
+          <label>Repouso</label>
         </div>
-        <div class="small">A senha é enviada como hash SHA-256. Para trocar a senha, preencha este campo antes de salvar.</div>
+        <div class="colorBox">
+          <div class="colorPreview" id="prevYellow"><input type="color" id="colorAlertYellow" value="#ffd166"></div>
+          <label>Alerta amarelo</label>
+        </div>
+        <div class="colorBox">
+          <div class="colorPreview" id="prevRed"><input type="color" id="colorAlertRed" value="#ff0000"></div>
+          <label>Alerta vermelho</label>
+        </div>
       </div>
+      <button class="soft" id="btnSaveColors" style="margin-top:12px" type="button">Salvar cores</button>
+    </div>
 
-      <div class="card half">
-        <h2>Cores e comportamento</h2>
-        <div class="row">
-          <div>
-            <label>Cor de repouso</label>
-            <input id="idleColor" type="color" value="#004600" />
-          </div>
-          <div>
-            <label>Cor de alerta</label>
-            <input id="alertColor" type="color" value="#ff0000" />
-          </div>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Limiar de alerta (dB relativo)</label>
-            <input id="thresholdDb" type="number" step="0.1" value="8" />
-          </div>
-          <div>
-            <label>Limiar de liberação (dB relativo)</label>
-            <input id="releaseDb" type="number" step="0.1" value="5" />
-          </div>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <div>
-            <label>Tempo acima do limiar (ms)</label>
-            <input id="triggerMs" type="number" step="10" value="300" />
-          </div>
-          <div>
-            <label>Tempo abaixo do limiar (ms)</label>
-            <input id="clearMs" type="number" step="10" value="800" />
-          </div>
+    <div class="card half">
+      <div class="sectionTitle">Sensibilidade</div>
+
+      <div class="field">
+        <label for="thresholdDb">Limiar de disparo</label>
+        <div class="slider">
+          <input type="range" id="thresholdDb" min="40" max="100" step="0.5" value="70">
+          <div class="val" id="thresholdDbVal">70.0 dB</div>
         </div>
       </div>
 
-      <div class="card half">
-        <h2>LED</h2>
-        <div class="row">
-          <div>
-            <label>Piscada ligada (ms)</label>
-            <input id="blinkOnMs" type="number" step="10" value="250" />
-          </div>
-          <div>
-            <label>Piscada desligada (ms)</label>
-            <input id="blinkOffMs" type="number" step="10" value="250" />
-          </div>
+      <div class="field">
+        <label for="releaseDb">Limiar de liberação</label>
+        <div class="slider">
+          <input type="range" id="releaseDb" min="30" max="95" step="0.5" value="66">
+          <div class="val" id="releaseDbVal">66.0 dB</div>
         </div>
-        <div class="small">A velocidade da piscada fica padrão no firmware; aqui você pode ajustar a aparência do alerta.</div>
       </div>
 
-      <div class="card half">
-        <h2>Importar / exportar JSON</h2>
-        <div class="actions" style="margin-bottom:12px">
-          <button id="btnExport">Exportar JSON</button>
-          <button id="btnImport">Importar JSON</button>
+      <div class="field">
+        <label for="triggerMs">Tempo para disparar</label>
+        <div class="slider">
+          <input type="range" id="triggerMs" min="200" max="5000" step="100" value="1500">
+          <div class="val" id="triggerMsVal">1500 ms</div>
         </div>
-        <textarea id="jsonArea" placeholder="Aqui entra a configuração JSON"></textarea>
       </div>
 
-      <div class="card">
-        <h2>Status ao vivo</h2>
-        <div class="status">
-          <div class="box"><span>Conectado</span><b id="stConn">não</b></div>
-          <div class="box"><span>Autenticado</span><b id="stAuth">não</b></div>
-          <div class="box"><span>Visível BLE</span><b id="stVis">não</b></div>
-          <div class="box"><span>Alerta</span><b id="stAlert">não</b></div>
-          <div class="box"><span>dB atual</span><b id="stDb">0.0</b></div>
-          <div class="box"><span>Ruído</span><b id="stNoise">0.0</b></div>
-          <div class="box"><span>RMS</span><b id="stRms">0.0</b></div>
-          <div class="box"><span>Peak</span><b id="stPeak">0.0</b></div>
+      <div class="field">
+        <label for="yellowHoldMs">Tempo no amarelo antes do vermelho</label>
+        <div class="slider">
+          <input type="range" id="yellowHoldMs" min="300" max="6000" step="100" value="1400">
+          <div class="val" id="yellowHoldMsVal">1400 ms</div>
         </div>
+      </div>
+
+      <div class="field">
+        <label for="clearMs">Tempo para liberar</label>
+        <div class="slider">
+          <input type="range" id="clearMs" min="200" max="5000" step="100" value="800">
+          <div class="val" id="clearMsVal">800 ms</div>
+        </div>
+      </div>
+
+      <button class="soft" id="btnSaveSensitivity" style="margin-top:4px" type="button">Salvar sensibilidade</button>
+    </div>
+
+    <div class="card half">
+      <div class="sectionTitle">Calibração</div>
+      <div class="notice">
+        Com a sala em silêncio normal, clique em <b>Calibrar ambiente</b>.  
+        A média medida vira o novo <b>ambientDb</b> e o limiar é ajustado automaticamente.
+      </div>
+      <div class="footer" style="margin-top:12px">
+        <span>Ambiental: <b id="ambientDb">--</b></span>
+        <span>Estágio: <b id="alertStage">--</b></span>
+        <span>Atual: <b id="currentDb">--</b></span>
+        <span>Efetivo: <b id="effectiveDb">--</b></span>
+      </div>
+    </div>
+
+    <div class="card half">
+      <div class="sectionTitle">Exportar / Importar / Compartilhar</div>
+      <textarea id="jsonPreview" readonly placeholder="O JSON da configuração aparece aqui ao exportar."></textarea>
+      <div class="actions" style="margin-top:10px">
+        <button class="soft" id="btnDownloadJson" type="button">Baixar JSON</button>
+        <button class="soft" id="btnLoadJson" type="button">Carregar arquivo JSON</button>
+      </div>
+      <input id="jsonFile" type="file" accept="application/json,.json" style="display:none">
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle">Status ao vivo</div>
+      <div class="status">
+        <div class="box"><span>Conectado</span><b id="stConnected">não</b></div>
+        <div class="box"><span>Autenticado</span><b id="stAuthenticated">não</b></div>
+        <div class="box"><span>Visível BLE</span><b id="stVisible">não</b></div>
+        <div class="box"><span>Estável</span><b id="stStable">não</b></div>
+        <div class="box"><span>dB atual</span><b id="stCurrentDb">--</b></div>
+        <div class="box"><span>dB efetivo</span><b id="stEffectiveDb">--</b></div>
+        <div class="box"><span>Alert stage</span><b id="stStage">--</b></div>
+        <div class="box"><span>Voz ok</span><b id="stVoiceOk">--</b></div>
       </div>
     </div>
   </div>
 
+  <div class="footer">
+    <span>Abra em Chrome/Edge via <b>localhost</b> ou <b>HTTPS</b>.</span>
+    <span>Web Bluetooth: leitura e escrita só depois da autenticação.</span>
+  </div>
+</div>
+
+<div id="authModal" class="modalBack">
+  <div class="modal">
+    <h2>Autenticação</h2>
+    <p>Digite a senha para liberar leitura e alteração das configurações.</p>
+    <div class="field">
+      <label for="modalPassword">Senha</label>
+      <input id="modalPassword" type="password" autocomplete="current-password" placeholder="senha">
+    </div>
+    <div class="actions">
+      <button class="primary" id="btnModalAuth" type="button">Entrar</button>
+      <button class="soft" id="btnCloseModal" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 <script>
-(() => {
-  const SERVICE_UUID   = '2f5f0001-8f4c-4dbd-93f4-3f7f3d5b0001';
-  const AUTH_UUID      = '2f5f0002-8f4c-4dbd-93f4-3f7f3d5b0001';
-  const CONFIG_UUID    = '2f5f0003-8f4c-4dbd-93f4-3f7f3d5b0001';
-  const STATUS_UUID    = '2f5f0004-8f4c-4dbd-93f4-3f7f3d5b0001';
-  const COMMAND_UUID   = '2f5f0005-8f4c-4dbd-93f4-3f7f3d5b0001';
+const UUID = {
+  service:   '4e424f58-0000-1000-8000-00805f9b34fb',
+  auth:      '4e424f58-0001-1000-8000-00805f9b34fb',
+  config:    '4e424f58-0002-1000-8000-00805f9b34fb',
+  status:    '4e424f58-0003-1000-8000-00805f9b34fb',
+  calibrate: '4e424f58-0004-1000-8000-00805f9b34fb',
+};
 
-  let device = null, server = null, authChar = null, configChar = null, statusChar = null, commandChar = null;
+let device = null;
+let server = null;
+let service = null;
+let chars = {};
+let connected = false;
+let authenticated = false;
+let statusTimer = null;
+let stableTimer = null;
+let lastStatusAt = 0;
+let currentConfig = {};
 
-  const $ = id => document.getElementById(id);
-  const stateEl = $('state');
+const $ = id => document.getElementById(id);
 
-  const setState = s => stateEl.textContent = s;
-  const setStatus = (k, v) => $(k).textContent = v;
+function toast(msg, kind='info', ms=2600) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = kind + ' show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = ''; }, ms);
+}
 
-  function hexToRgb(hex){
-    hex = hex.replace('#','').trim();
-    return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+function setBadge() {
+  const badge = $('connBadge');
+  badge.className = 'pill';
+  if (connected && authenticated && isStable()) badge.classList.add('stable');
+  else if (connected && authenticated) badge.classList.add('authed');
+  else if (connected) badge.classList.add('connected');
+  $('connText').textContent = connected ? (authenticated ? (isStable() ? 'conectado estável' : 'conectado') : 'conectado') : 'desconectado';
+}
+
+function isStable() {
+  return connected && authenticated && (Date.now() - lastStatusAt < 3500);
+}
+
+function updateLiveState() {
+  $('stConnected').textContent = connected ? 'sim' : 'não';
+  $('stAuthenticated').textContent = authenticated ? 'sim' : 'não';
+  $('stVisible').textContent = device?.gatt?.connected ? 'sim' : 'não';
+  $('stStable').textContent = isStable() ? 'sim' : 'não';
+  setBadge();
+}
+
+function hexToRgb(hex) {
+  const h = hex.replace('#','');
+  return [0,2,4].map(i => parseInt(h.slice(i, i+2), 16));
+}
+function rgbToHex(arr) {
+  return '#' + arr.map(v => Number(v).toString(16).padStart(2,'0')).join('');
+}
+
+function updatePreview(which) {
+  const map = {
+    idle: $('colorIdle').value,
+    yellow: $('colorAlertYellow').value,
+    red: $('colorAlertRed').value,
+  };
+  if (which === 'idle') $('prevIdle').style.background = map.idle;
+  if (which === 'yellow') $('prevYellow').style.background = map.yellow;
+  if (which === 'red') $('prevRed').style.background = map.red;
+}
+
+function setVal(id, value, suffix) {
+  $(id).value = value;
+  $(id + 'Val').textContent = (suffix === 'ms' ? Math.round(value) : Number(value).toFixed(1)) + ' ' + suffix;
+}
+
+function collectForm() {
+  return {
+    deviceName: $('deviceName').value.trim(),
+    newPassword: $('newPassword').value,
+    thresholdDb: Number($('thresholdDb').value),
+    releaseDb: Number($('releaseDb').value),
+    triggerMs: Number($('triggerMs').value),
+    clearMs: Number($('clearMs').value),
+    yellowHoldMs: Number($('yellowHoldMs').value),
+    colorIdle: hexToRgb($('colorIdle').value),
+    colorAlertYellow: hexToRgb($('colorAlertYellow').value),
+    colorAlertRed: hexToRgb($('colorAlertRed').value),
+    ambientDb: currentConfig.ambientDb ?? undefined,
+  };
+}
+
+function fillForm(cfg) {
+  if (!cfg) return;
+  if (cfg.deviceName) $('deviceName').value = cfg.deviceName;
+  if (cfg.thresholdDb != null) setVal('thresholdDb', cfg.thresholdDb, 'dB');
+  if (cfg.releaseDb != null) setVal('releaseDb', cfg.releaseDb, 'dB');
+  if (cfg.triggerMs != null) setVal('triggerMs', cfg.triggerMs, 'ms');
+  if (cfg.clearMs != null) setVal('clearMs', cfg.clearMs, 'ms');
+  if (cfg.yellowHoldMs != null) setVal('yellowHoldMs', cfg.yellowHoldMs, 'ms');
+  if (Array.isArray(cfg.colorIdle)) { $('colorIdle').value = rgbToHex(cfg.colorIdle); updatePreview('idle'); }
+  if (Array.isArray(cfg.colorAlertYellow)) { $('colorAlertYellow').value = rgbToHex(cfg.colorAlertYellow); updatePreview('yellow'); }
+  if (Array.isArray(cfg.colorAlertRed)) { $('colorAlertRed').value = rgbToHex(cfg.colorAlertRed); updatePreview('red'); }
+  if (cfg.ambientDb != null) $('ambientDb').textContent = Number(cfg.ambientDb).toFixed(1) + ' dB';
+  if (cfg.currentDb != null) $('currentDb').textContent = Number(cfg.currentDb).toFixed(1) + ' dB';
+  if (cfg.effectiveDb != null) $('effectiveDb').textContent = Number(cfg.effectiveDb).toFixed(1) + ' dB';
+}
+
+function setRememberMode(checked) {
+  const p = $('password');
+  p.autocomplete = checked ? 'current-password' : 'off';
+  if (!checked) localStorage.removeItem('noisebox_password');
+  if (checked && localStorage.getItem('noisebox_password')) {
+    p.value = localStorage.getItem('noisebox_password') || '';
   }
-  function rgbToHex(arr){
-    const [r,g,b] = arr.map(v => Math.max(0, Math.min(255, Number(v)||0)));
-    return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+async function sha256Hex(text) {
+  const data = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function writeChar(name, value) {
+  if (!chars[name]) throw new Error(`Característica ${name} indisponível`);
+  const payload = typeof value === 'string' ? new TextEncoder().encode(value) : value;
+  await chars[name].writeValue(payload);
+}
+
+async function readChar(name) {
+  if (!chars[name]) throw new Error(`Característica ${name} indisponível`);
+  const val = await chars[name].readValue();
+  return new TextDecoder().decode(val);
+}
+
+function showAuthModal(show=true) {
+  $('authModal').classList.toggle('show', show);
+  if (show) $('modalPassword').focus();
+}
+
+function closeAuthModal() {
+  $('authModal').classList.remove('show');
+}
+
+function attachStabilityWatch() {
+  clearInterval(stableTimer);
+  stableTimer = setInterval(() => {
+    updateLiveState();
+  }, 500);
+}
+
+function attachStatusPolling() {
+  clearInterval(statusTimer);
+  statusTimer = setInterval(async () => {
+    if (!connected || !authenticated || !chars.status) return;
+    try {
+      const raw = await readChar('status');
+      if (raw === 'UNAUTH') return;
+      const st = JSON.parse(raw);
+      lastStatusAt = Date.now();
+      $('stCurrentDb').textContent = Number(st.currentDb ?? 0).toFixed(1);
+      $('stEffectiveDb').textContent = Number(st.effectiveDb ?? 0).toFixed(1);
+      $('stStage').textContent = ['idle','amarelo','vermelho'][Number(st.alertStage ?? 0)] || '--';
+      $('stVoiceOk').textContent = st.voiceOk ? 'sim' : 'não';
+      $('ambientDb').textContent = Number(st.ambientDb ?? 0).toFixed(1) + ' dB';
+      currentConfig = st;
+      setBadge();
+    } catch {}
+  }, 1200);
+}
+
+function onStatusNotify(ev) {
+  try {
+    const st = JSON.parse(new TextDecoder().decode(ev.target.value));
+    lastStatusAt = Date.now();
+    $('stCurrentDb').textContent = Number(st.currentDb ?? 0).toFixed(1);
+    $('stEffectiveDb').textContent = Number(st.effectiveDb ?? 0).toFixed(1);
+    $('stStage').textContent = ['idle','amarelo','vermelho'][Number(st.alertStage ?? 0)] || '--';
+    $('stVoiceOk').textContent = st.voiceOk ? 'sim' : 'não';
+    $('ambientDb').textContent = Number(st.ambientDb ?? 0).toFixed(1) + ' dB';
+    currentConfig = st;
+    setBadge();
+  } catch {}
+}
+
+async function connectBLE() {
+  if (!navigator.bluetooth) {
+    toast('Web Bluetooth indisponível neste navegador', 'err', 5000);
+    return;
   }
-  function readForm(){
-    return {
-      deviceName: $('deviceName').value.trim(),
-      password: $('password').value,
-      idleColor: hexToRgb($('idleColor').value),
-      alertColor: hexToRgb($('alertColor').value),
-      thresholdDb: Number($('thresholdDb').value),
-      releaseDb: Number($('releaseDb').value),
-      triggerMs: Number($('triggerMs').value),
-      clearMs: Number($('clearMs').value),
-      blinkOnMs: Number($('blinkOnMs').value),
-      blinkOffMs: Number($('blinkOffMs').value)
-    };
-  }
-  function fillForm(obj){
-    if (!obj) return;
-    if (obj.deviceName != null) $('deviceName').value = obj.deviceName;
-    if (obj.idleColor) $('idleColor').value = rgbToHex(obj.idleColor);
-    if (obj.alertColor) $('alertColor').value = rgbToHex(obj.alertColor);
-    if (obj.thresholdDb != null) $('thresholdDb').value = obj.thresholdDb;
-    if (obj.releaseDb != null) $('releaseDb').value = obj.releaseDb;
-    if (obj.triggerMs != null) $('triggerMs').value = obj.triggerMs;
-    if (obj.clearMs != null) $('clearMs').value = obj.clearMs;
-    if (obj.blinkOnMs != null) $('blinkOnMs').value = obj.blinkOnMs;
-    if (obj.blinkOffMs != null) $('blinkOffMs').value = obj.blinkOffMs;
-    if (obj.idleColor) $('idleColor').value = rgbToHex(obj.idleColor);
-    if (obj.alertColor) $('alertColor').value = rgbToHex(obj.alertColor);
-  }
-  async function sha256Hex(text){
-    const data = new TextEncoder().encode(text);
-    const hash = await crypto.subtle.digest('SHA-256', data);
-    return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-  async function connect(){
-    if (!navigator.bluetooth) {
-      alert('Web Bluetooth não está disponível neste navegador.');
-      return;
-    }
+
+  try {
+    toast('Procurando NoiseBox...', 'info');
     device = await navigator.bluetooth.requestDevice({
-      filters: [{ services: [SERVICE_UUID] }],
-      optionalServices: [SERVICE_UUID]
+      filters: [{ services: [UUID.service] }],
+      optionalServices: [UUID.service]
     });
-
-    device.addEventListener('gattserverdisconnected', () => {
-      setState('desconectado');
-      setStatus('stConn', 'não');
-      setStatus('stAuth', 'não');
-    });
+    device.addEventListener('gattserverdisconnected', onDisconnected);
 
     server = await device.gatt.connect();
-    const service = await server.getPrimaryService(SERVICE_UUID);
-    authChar = await service.getCharacteristic(AUTH_UUID);
-    configChar = await service.getCharacteristic(CONFIG_UUID);
-    statusChar = await service.getCharacteristic(STATUS_UUID);
-    commandChar = await service.getCharacteristic(COMMAND_UUID);
+    service = await server.getPrimaryService(UUID.service);
 
-    await statusChar.startNotifications();
-    statusChar.addEventListener('characteristicvaluechanged', ev => {
+    chars.auth = await service.getCharacteristic(UUID.auth);
+    chars.config = await service.getCharacteristic(UUID.config);
+    chars.status = await service.getCharacteristic(UUID.status);
+    chars.calibrate = await service.getCharacteristic(UUID.calibrate);
+
+    await chars.status.startNotifications();
+    chars.status.addEventListener('characteristicvaluechanged', onStatusNotify);
+
+    connected = true;
+    authenticated = false;
+    lastStatusAt = 0;
+    updateLiveState();
+    showAuthModal(true);
+    attachStabilityWatch();
+
+    $('btnConnect').disabled = true;
+    toast('Conectado. Autentique para liberar leitura e escrita.', 'ok');
+  } catch (err) {
+    toast(err.message || String(err), 'err', 5000);
+    cleanup();
+  }
+}
+
+function onDisconnected() {
+  toast('Dispositivo desconectado', 'info', 3500);
+  cleanup();
+}
+
+function cleanup() {
+  clearInterval(statusTimer);
+  clearInterval(stableTimer);
+  statusTimer = stableTimer = null;
+  connected = false;
+  authenticated = false;
+  device = server = service = null;
+  chars = {};
+  currentConfig = {};
+  hideConfig();
+  updateLiveState();
+  $('btnConnect').disabled = false;
+  $('stCurrentDb').textContent = '--';
+  $('stEffectiveDb').textContent = '--';
+  $('stStage').textContent = '--';
+  $('stVoiceOk').textContent = '--';
+  $('ambientDb').textContent = '--';
+}
+
+function hideConfig() {
+  // nada além de manter a página visível; os botões já exigem auth
+}
+
+async function authenticate() {
+  const pass = $('modalPassword').value || $('password').value;
+  if (!pass) { toast('Digite a senha', 'info'); return; }
+  if (!connected) { toast('Conecte primeiro', 'info'); return; }
+  const hash = await sha256Hex(pass);
+  await writeChar('auth', hash);
+  const resp = await readChar('auth').catch(() => 'LOCKED');
+  if (resp === 'OK') {
+    authenticated = true;
+    closeAuthModal();
+    updateLiveState();
+    attachStatusPolling();
+    toast('Autenticado com sucesso', 'ok');
+
+    const remember = $('rememberPassword').checked;
+    if (remember) {
+      localStorage.setItem('noisebox_password', pass);
       try {
-        const txt = new TextDecoder().decode(ev.target.value);
-        const st = JSON.parse(txt);
-        setStatus('stConn', st.connected ? 'sim' : 'não');
-        setStatus('stAuth', st.auth ? 'sim' : 'não');
-        setStatus('stVis', st.visible ? 'sim' : 'não');
-        setStatus('stAlert', st.alert ? 'sim' : 'não');
-        setStatus('stDb', Number(st.db ?? 0).toFixed(1));
-        setStatus('stNoise', Number(st.noise ?? 0).toFixed(1));
-        setStatus('stRms', Number(st.rms ?? 0).toFixed(1));
-        setStatus('stPeak', Number(st.peak ?? 0).toFixed(1));
-      } catch(e) {}
-    });
+        if (window.PasswordCredential && navigator.credentials?.store) {
+          const cred = new PasswordCredential({ id: 'NoiseBox', password: pass, name: 'NoiseBox' });
+          await navigator.credentials.store(cred);
+        }
+      } catch {}
+    } else {
+      localStorage.removeItem('noisebox_password');
+    }
 
-    setState('conectado');
-    setStatus('stConn', 'sim');
     await readConfig();
+  } else {
+    authenticated = false;
+    updateLiveState();
+    toast('Senha incorreta', 'err');
   }
+}
 
-  async function auth(){
-    if (!authChar) throw new Error('Conecte primeiro.');
-    const pass = $('password').value || '';
-    const hash = await sha256Hex(pass);
-    await authChar.writeValue(new TextEncoder().encode(hash));
-    await new Promise(r => setTimeout(r, 180));
-  }
+async function readConfig() {
+  if (!authenticated) { toast('Autentique primeiro', 'info'); return; }
+  const raw = await readChar('config');
+  if (raw === 'UNAUTH') { toast('Acesso negado', 'err'); return; }
+  const cfg = JSON.parse(raw);
+  currentConfig = cfg;
+  fillForm(cfg);
+  $('jsonPreview').value = JSON.stringify(cfg, null, 2);
+  toast('Configuração lida', 'ok');
+}
 
-  async function readConfig(){
-    const value = await configChar.readValue();
-    const txt = new TextDecoder().decode(value);
-    $('jsonArea').value = txt;
-    const obj = JSON.parse(txt);
-    fillForm(obj);
-  }
+async function saveConfig(payload) {
+  if (!authenticated) { toast('Autentique primeiro', 'info'); return; }
+  await writeChar('config', JSON.stringify(payload));
+  $('jsonPreview').value = JSON.stringify(payload, null, 2);
+  toast('Configuração salva', 'ok');
+  await readConfig().catch(() => {});
+}
 
-  async function saveConfig(){
-    await auth();
-    const obj = readForm();
-    const payload = JSON.stringify(obj);
-    await configChar.writeValue(new TextEncoder().encode(payload));
-    await readConfig();
-  }
+async function doSaveAll() {
+  const payload = collectForm();
+  await saveConfig(payload);
+}
 
-  async function calibrate(){
-    await auth();
-    await commandChar.writeValue(new TextEncoder().encode('CALIBRATE'));
-  }
+async function doSaveColors() {
+  const payload = {
+    colorIdle: hexToRgb($('colorIdle').value),
+    colorAlertYellow: hexToRgb($('colorAlertYellow').value),
+    colorAlertRed: hexToRgb($('colorAlertRed').value),
+  };
+  await saveConfig(payload);
+}
 
-  async function bleOn(){
-    await auth();
-    await commandChar.writeValue(new TextEncoder().encode('BLE_ON'));
-  }
+async function doSaveSensitivity() {
+  const payload = {
+    thresholdDb: Number($('thresholdDb').value),
+    releaseDb: Number($('releaseDb').value),
+    triggerMs: Number($('triggerMs').value),
+    clearMs: Number($('clearMs').value),
+    yellowHoldMs: Number($('yellowHoldMs').value),
+  };
+  await saveConfig(payload);
+}
 
-  async function bleOff(){
-    await auth();
-    await commandChar.writeValue(new TextEncoder().encode('BLE_OFF'));
-  }
+async function doCalibrate() {
+  if (!authenticated) { toast('Autentique primeiro', 'info'); return; }
+  await writeChar('calibrate', 'CALIBRATE');
+  toast('Calibração iniciada...', 'info', 3500);
+}
 
-  async function exportJson(){
-    const obj = readForm();
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'caixinha_config.json';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 500);
-  }
+async function exportJson() {
+  if (!authenticated) { toast('Autentique primeiro', 'info'); return; }
+  const raw = await readChar('config');
+  if (raw === 'UNAUTH') { toast('Acesso negado', 'err'); return; }
+  $('jsonPreview').value = JSON.stringify(JSON.parse(raw), null, 2);
+  toast('JSON exportado', 'ok');
+}
 
-  async function importJson(){
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json,.json';
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      const txt = await file.text();
-      $('jsonArea').value = txt;
-      try {
-        fillForm(JSON.parse(txt));
-      } catch(e) {
-        alert('JSON inválido.');
+function downloadJson() {
+  const text = $('jsonPreview').value.trim();
+  if (!text) { toast('Exporte antes de baixar', 'info'); return; }
+  const blob = new Blob([text], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'noisebox-config.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 500);
+}
+
+async function importJsonFromText(text) {
+  if (!authenticated) { toast('Autentique primeiro', 'info'); return; }
+  const obj = JSON.parse(text);
+  await saveConfig(obj);
+  fillForm(obj);
+}
+
+async function importJsonFile() {
+  $('jsonFile').click();
+}
+
+async function shareConfig() {
+  if (!authenticated) { toast('Autentique primeiro', 'info'); return; }
+  const raw = await readChar('config');
+  const pretty = JSON.stringify(JSON.parse(raw), null, 2);
+  $('jsonPreview').value = pretty;
+
+  try {
+    if (navigator.share) {
+      const file = new File([pretty], 'noisebox-config.json', { type: 'application/json' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: 'NoiseBox',
+          text: 'Configuração da NoiseBox',
+          files: [file]
+        });
+      } else {
+        await navigator.share({
+          title: 'NoiseBox',
+          text: pretty
+        });
       }
-    };
-    input.click();
+      toast('Compartilhado', 'ok');
+    } else {
+      await navigator.clipboard.writeText(pretty);
+      toast('JSON copiado para a área de transferência', 'ok');
+    }
+  } catch (e) {
+    toast(e.message || 'Falha ao compartilhar', 'err');
+  }
+}
+
+function bindUi() {
+  $('btnConnect').addEventListener('click', connectBLE);
+  $('btnRead').addEventListener('click', readConfig);
+  $('btnSave').addEventListener('click', doSaveAll);
+  $('btnCalibrate').addEventListener('click', doCalibrate);
+  $('btnExport').addEventListener('click', exportJson);
+  $('btnDownloadJson').addEventListener('click', downloadJson);
+  $('btnImport').addEventListener('click', importJsonFile);
+  $('btnLoadJson').addEventListener('click', importJsonFile);
+  $('btnShare').addEventListener('click', shareConfig);
+  $('btnAuth').addEventListener('click', authenticate);
+  $('btnModalAuth').addEventListener('click', authenticate);
+  $('btnCloseModal').addEventListener('click', () => showAuthModal(false));
+  $('btnSaveColors').addEventListener('click', doSaveColors);
+  $('btnSaveSensitivity').addEventListener('click', doSaveSensitivity);
+  $('password').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+  $('modalPassword').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+
+  ['colorIdle','colorAlertYellow','colorAlertRed'].forEach(id => {
+    $(id).addEventListener('input', () => updatePreview(id === 'colorIdle' ? 'idle' : id === 'colorAlertYellow' ? 'yellow' : 'red'));
+  });
+
+  ['thresholdDb','releaseDb','triggerMs','yellowHoldMs','clearMs'].forEach(id => {
+    $(id).addEventListener('input', () => {
+      const unit = id.includes('Ms') || id === 'triggerMs' || id === 'clearMs' || id === 'yellowHoldMs' ? 'ms' : 'dB';
+      $(id + 'Val').textContent = (unit === 'ms' ? Math.round(Number($(id).value)) : Number($(id).value).toFixed(1)) + ' ' + unit;
+    });
+  });
+
+  $('rememberPassword').addEventListener('change', e => setRememberMode(e.target.checked));
+  $('jsonFile').addEventListener('change', async e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    $('jsonPreview').value = text;
+    try {
+      const obj = JSON.parse(text);
+      fillForm(obj);
+      await saveConfig(obj);
+      toast('JSON importado', 'ok');
+    } catch (err) {
+      toast('JSON inválido', 'err');
+    }
+    e.target.value = '';
+  });
+}
+
+function init() {
+  bindUi();
+  updatePreview('idle');
+  updatePreview('yellow');
+  updatePreview('red');
+
+  const savedPass = localStorage.getItem('noisebox_password');
+  if (savedPass) {
+    $('rememberPassword').checked = true;
+    $('password').value = savedPass;
+    setRememberMode(true);
+  } else {
+    setRememberMode(false);
   }
 
-  $('btnConnect').onclick = () => connect().catch(e => alert(e.message || e));
-  $('btnRead').onclick = () => readConfig().catch(e => alert(e.message || e));
-  $('btnSave').onclick = () => saveConfig().catch(e => alert(e.message || e));
-  $('btnCalibrate').onclick = () => calibrate().catch(e => alert(e.message || e));
-  $('btnBleOn').onclick = () => bleOn().catch(e => alert(e.message || e));
-  $('btnBleOff').onclick = () => bleOff().catch(e => alert(e.message || e));
-  $('btnExport').onclick = () => exportJson().catch(e => alert(e.message || e));
-  $('btnImport').onclick = () => importJson().catch(e => alert(e.message || e));
+  if (!navigator.bluetooth) {
+    $('btnConnect').disabled = true;
+    toast('Este navegador não suporta Web Bluetooth', 'err', 5000);
+  }
 
-  // valores iniciais
-  setState('desconectado');
-})();
+  setInterval(() => {
+    connected = !!device?.gatt?.connected;
+    if (!connected) authenticated = false;
+    updateLiveState();
+  }, 500);
+}
+
+function isAuthed() { return authenticated; }
+
+window.addEventListener('load', init);
 </script>
 </body>
 </html>
