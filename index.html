@@ -1,586 +1,403 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-silent — Painel Master</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-
-<style>
-:root{
-  --bg:#0e0f14;
-  --surface:#16181f;
-  --surface2:#1e2029;
-  --border:#2a2d3a;
-  --text:#d4d8e8;
-  --muted:#6b7280;
-
-  --green:#22c55e;
-  --amber:#f59e0b;
-  --red:#ef4444;
-  --blue:#3b82f6;
-  --accent:#6366f1;
-
-  --mono:'IBM Plex Mono', monospace;
-  --sans:'IBM Plex Sans', sans-serif;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--sans);
-  padding:24px 16px 48px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-.card{
-  width:100%;
-  max-width:580px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:14px;
-  overflow:hidden;
-  margin-bottom:14px;
-}
-
-.card-header{
-  background:var(--surface2);
-  border-bottom:1px solid var(--border);
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.card-body{
-  padding:18px;
-}
-
-.header{
-  width:100%;
-  max-width:580px;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:24px;
-}
-
-.traffic{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-
-.traffic span{
-  width:11px;
-  height:11px;
-  border-radius:50%;
-}
-
-.r{background:var(--red);}
-.y{background:var(--amber);}
-.g{background:var(--green);}
-
-h1{
-  font-size:1.3rem;
-}
-
-p{
-  color:var(--muted);
-}
-
-.badge{
-  padding:4px 8px;
-  border-radius:6px;
-  font-size:.72rem;
-  font-family:var(--mono);
-}
-
-.badge-off{
-  background:#2a1313;
-  color:var(--red);
-}
-
-.badge-on{
-  background:#102616;
-  color:var(--green);
-}
-
-.badge-auth{
-  background:#0f1d36;
-  color:#60a5fa;
-}
-
-.conn{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-
-.dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:var(--red);
-}
-
-.dot.on{
-  background:var(--green);
-  box-shadow:0 0 10px var(--green);
-}
-
-button{
-  border:none;
-  border-radius:8px;
-  padding:10px 16px;
-  cursor:pointer;
-  font-family:var(--mono);
-  font-weight:600;
-  transition:.15s;
-}
-
-button:hover{
-  opacity:.9;
-}
-
-button:disabled{
-  opacity:.4;
-  cursor:not-allowed;
-}
-
-.btn-primary{
-  background:var(--accent);
-  color:white;
-}
-
-.btn-outline{
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--text);
-}
-
-.btn-cyan{
-  background:#0d2931;
-  color:#67e8f9;
-  border:1px solid #164e63;
-}
-
-.btn-danger{
-  background:#3b1010;
-  color:#ef4444;
-}
-
-input,select{
-  width:100%;
-  padding:10px 12px;
-  background:var(--bg);
-  border:1px solid var(--border);
-  border-radius:8px;
-  color:var(--text);
-  font-family:var(--mono);
-}
-
-label{
-  display:block;
-  margin-bottom:6px;
-  font-size:.75rem;
-  font-family:var(--mono);
-  color:var(--muted);
-}
-
-.field{
-  margin-bottom:18px;
-}
-
-.form-row{
-  display:flex;
-  gap:12px;
-}
-
-.chart-wrap{
-  position:relative;
-  height:160px;
-}
-
-.chart-value{
-  font-size:2rem;
-  font-family:var(--mono);
-  font-weight:600;
-  text-align:center;
-}
-
-.hidden{
-  display:none !important;
-}
-
-#toast{
-  position:fixed;
-  bottom:24px;
-  left:50%;
-  transform:translateX(-50%) translateY(80px);
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px 18px;
-  transition:.25s;
-  font-family:var(--mono);
-}
-
-#toast.show{
-  transform:translateX(-50%) translateY(0);
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semáforo do Silêncio — Configuração</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --surface: #151a22;
+      --border: #2a3344;
+      --text: #e8edf5;
+      --muted: #8b97ab;
+      --amber: #f5b942;
+      --green: #3ecf8e;
+      --red: #f07178;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 520px; margin: 0 auto; padding: 24px 20px 48px; }
+    h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 14px;
+      font-weight: 600;
+    }
+    label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+    input[type="text"], input[type="password"], input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.85rem;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--amber); }
+    .row { margin-bottom: 14px; }
+    .row:last-child { margin-bottom: 0; }
+    .val { font-family: "JetBrains Mono", monospace; font-size: 0.8rem; color: var(--amber); }
+    button {
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn-primary { background: var(--amber); color: #0c0f14; }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .meter {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--amber), var(--red));
+      transition: width 0.1s;
+    }
+    .log {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      max-height: 100px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(62, 207, 142, 0.12);
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+    .status.off { background: rgba(240, 113, 120, 0.12); color: var(--red); }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(245, 185, 66, 0.06);
+      border: 1px solid rgba(245, 185, 66, 0.2);
+    }
+    input[type="color"] {
+      width: 100%;
+      height: 42px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Semáforo do Silêncio</h1>
+    <p class="sub">Configuração via Web Bluetooth (Chrome / Edge). Na caixinha: <strong>5 toques rápidos</strong> no sensor para tornar o BLE visível por 3 min.</p>
 
-<div class="header">
-  <div class="traffic">
-    <span class="r"></span>
-    <span class="y"></span>
-    <span class="g"></span>
-  </div>
+    <div id="statusPill" class="status off"><span class="dot"></span><span id="statusText">Desconectado</span></div>
 
-  <div>
-    <h1>E-silent</h1>
-    <p>Painel Master Bluetooth</p>
-  </div>
-</div>
+    <section id="panelConnect" class="card">
+      <h2>Conexão</h2>
+      <button id="btnConnect" class="btn-primary" type="button">Buscar dispositivo</button>
+      <p class="hint">Use HTTPS ou <code>localhost</code>. O filtro usa o UUID do serviço do projeto.</p>
+    </section>
 
-<div class="card">
-  <div class="card-header">
-    <span>Bluetooth</span>
-    <span class="badge badge-off" id="connBadge">OFFLINE</span>
-  </div>
-
-  <div class="card-body">
-    <div class="conn">
-      <div class="dot" id="statusDot"></div>
-      <span id="statusText">Desconectado</span>
-      <button class="btn-primary" id="btnConnect">Conectar</button>
-    </div>
-  </div>
-</div>
-
-<div class="card hidden" id="authCard">
-  <div class="card-header">
-    <span>Autenticação</span>
-    <span class="badge badge-off" id="authBadge">NÃO AUTENTICADO</span>
-  </div>
-
-  <div class="card-body">
-    <div class="field">
-      <label>Senha</label>
-
-      <div class="form-row">
-        <input type="password" id="password" placeholder="1234">
-        <button class="btn-primary" id="btnLogin">Entrar</button>
+    <section id="panelAuth" class="card hidden">
+      <h2>Autenticação</h2>
+      <div class="row">
+        <label for="pin">PIN (padrão de fábrica: 1234)</label>
+        <input id="pin" type="password" autocomplete="off" maxlength="16" />
       </div>
-    </div>
+      <button id="btnLogin" class="btn-primary" type="button">Entrar</button>
+    </section>
+
+    <section id="panelConfig" class="hidden">
+      <div class="card">
+        <h2>Nível ao vivo</h2>
+        <div>RMS: <span id="liveRms" class="val">0</span> · Voz: <span id="liveVoice" class="val">0</span>%</div>
+        <div class="meter"><div id="meterFill" class="meter-fill"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>Limites (0–1000)</h2>
+        <div class="row">
+          <label>Amarelo — <span id="valY" class="val">150</span></label>
+          <input id="limY" type="range" min="0" max="990" step="5" value="150" />
+        </div>
+        <div class="row">
+          <label>Vermelho — <span id="valR" class="val">350</span></label>
+          <input id="limR" type="range" min="10" max="1000" step="5" value="350" />
+        </div>
+        <button id="btnLimits" class="btn-ghost" type="button">Salvar limites</button>
+      </div>
+
+      <div class="card">
+        <h2>Detecção de voz</h2>
+        <div class="row">
+          <label>Limiar probabilidade — <span id="valVoz" class="val">55</span>%</label>
+          <input id="voz" type="range" min="0" max="100" value="55" />
+        </div>
+        <button id="btnVoz" class="btn-ghost" type="button">Salvar limiar de voz</button>
+      </div>
+
+      <div class="card">
+        <h2>LED de alerta</h2>
+        <div class="row">
+          <label>Cor do pisca-vermelho (velocidade fixa no firmware)</label>
+          <input id="alertColor" type="color" value="#ff0000" />
+        </div>
+        <button id="btnColor" class="btn-ghost" type="button">Salvar cor</button>
+      </div>
+
+      <div class="card">
+        <h2>Dispositivo</h2>
+        <div class="row">
+          <label for="nome">Nome Bluetooth</label>
+          <input id="nome" type="text" placeholder="Semaforo_Mesa_01" />
+        </div>
+        <button id="btnNome" class="btn-ghost" type="button">Salvar nome</button>
+        <div class="row" style="margin-top:14px">
+          <label for="novaSenha">Novo PIN (mín. 4)</label>
+          <input id="novaSenha" type="password" />
+        </div>
+        <button id="btnSenha" class="btn-ghost" type="button">Alterar PIN</button>
+        <div class="row" style="margin-top:14px">
+          <label><input id="touchOk" type="checkbox" checked /> Exigir toque para desligar alerta</label>
+        </div>
+        <button id="btnTouch" class="btn-ghost" type="button">Salvar anti-trapaça</button>
+      </div>
+
+      <div class="card">
+        <h2>Ambiente & backup</h2>
+        <button id="btnCalibrar" class="btn-primary" type="button">Calibrar silêncio atual</button>
+        <div class="grid2" style="margin-top:10px">
+          <button id="btnExport" class="btn-ghost" type="button">Exportar JSON</button>
+          <button id="btnImport" class="btn-ghost" type="button">Importar JSON</button>
+        </div>
+        <textarea id="jsonBox" class="hidden" rows="6" style="width:100%;margin-top:10px;font-size:0.75rem"></textarea>
+      </div>
+
+      <button id="btnDisconnect" class="btn-ghost" type="button">Desconectar</button>
+      <div id="log" class="log"></div>
+    </section>
   </div>
-</div>
 
-<div class="card hidden" id="chartCard">
-  <div class="card-header">
-    <span>Monitoramento</span>
-    <span class="badge badge-on">AO VIVO</span>
-  </div>
+  <script>
+    const SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+    const CHAR_CMD = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+    const CHAR_NOTIFY = 'beb5483e-36e1-4688-b7f5-ea07361b26a9';
 
-  <div class="card-body">
+    let device, server, cmdChar, notifyChar;
+    let authenticated = false;
 
-    <div class="chart-value" id="liveValue">0</div>
+    const $ = (id) => document.getElementById(id);
 
-    <div class="chart-wrap">
-      <canvas id="audioChart"></canvas>
-    </div>
+    function log(msg) {
+      const el = $('log');
+      if (!el) return;
+      el.textContent = `[${new Date().toLocaleTimeString()}] ${msg}\n` + el.textContent;
+    }
 
-  </div>
-</div>
+    function setStatus(connected, text) {
+      const pill = $('statusPill');
+      pill.classList.toggle('off', !connected);
+      $('statusText').textContent = text;
+    }
 
-<div class="card hidden" id="configCard">
-  <div class="card-header">
-    <span>Configurações</span>
-    <span class="badge badge-auth">ADMIN</span>
-  </div>
+    function showPanels(state) {
+      $('panelConnect').classList.toggle('hidden', state !== 'connect');
+      $('panelAuth').classList.toggle('hidden', state !== 'auth');
+      $('panelConfig').classList.toggle('hidden', state !== 'config');
+    }
 
-  <div class="card-body">
+    async function writeCmd(str) {
+      const enc = new TextEncoder();
+      await cmdChar.writeValue(enc.encode(str));
+    }
 
-    <div class="field">
-      <label>Limite Amarelo</label>
-      <input type="number" id="limitAmarelo">
-    </div>
+    function onNotify(event) {
+      const dec = new TextDecoder();
+      const msg = dec.decode(event.target.value);
+      log('← ' + msg);
 
-    <div class="field">
-      <label>Limite Vermelho</label>
-      <input type="number" id="limitVermelho">
-    </div>
-
-    <button class="btn-primary" id="btnSalvar">Salvar Limites</button>
-
-  </div>
-</div>
-
-<div id="toast"></div>
-
-<script>
-const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-
-let bleDevice = null;
-let bleCharacteristic = null;
-
-let isAuthenticated = false;
-
-const UI = {
-  btnConnect: document.getElementById("btnConnect"),
-  statusText: document.getElementById("statusText"),
-  statusDot: document.getElementById("statusDot"),
-  connBadge: document.getElementById("connBadge"),
-
-  authCard: document.getElementById("authCard"),
-  chartCard: document.getElementById("chartCard"),
-  configCard: document.getElementById("configCard"),
-
-  authBadge: document.getElementById("authBadge"),
-
-  liveValue: document.getElementById("liveValue"),
-
-  limitAmarelo: document.getElementById("limitAmarelo"),
-  limitVermelho: document.getElementById("limitVermelho")
-};
-
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.innerText = msg;
-  t.classList.add("show");
-
-  setTimeout(()=>{
-    t.classList.remove("show");
-  },3000);
-}
-
-const chartData = new Array(80).fill(0);
-
-const ctx = document.getElementById('audioChart').getContext('2d');
-
-const audioChart = new Chart(ctx,{
-  type:'line',
-  data:{
-    labels: chartData.map(()=> ''),
-    datasets:[
-      {
-        data:[...chartData],
-        borderColor:'#22c55e',
-        borderWidth:2,
-        pointRadius:0,
-        tension:0.3
+      if (msg.startsWith('OK:LOGIN')) {
+        authenticated = true;
+        showPanels('config');
+        setStatus(true, 'Autenticado');
       }
-    ]
-  },
-  options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    animation:false,
-    plugins:{
-      legend:{display:false}
-    },
-    scales:{
-      x:{display:false},
-      y:{
-        min:0,
-        suggestedMax:2000
+      if (msg.startsWith('ERR:LOGIN')) {
+        alert('PIN incorreto');
+      }
+      if (msg.startsWith('CONFIG:')) {
+        const json = msg.slice(7);
+        $('jsonBox').value = json;
+        $('jsonBox').classList.remove('hidden');
+        try {
+          const cfg = JSON.parse(json);
+          $('limY').value = cfg.limY ?? 150;
+          $('limR').value = cfg.limR ?? 350;
+          $('voz').value = cfg.voz ?? 55;
+          $('nome').value = cfg.name ?? '';
+          $('touchOk').checked = cfg.touchOk !== false;
+          const r = cfg.r ?? 255, g = cfg.g ?? 0, b = cfg.b ?? 0;
+          $('alertColor').value = '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
+          syncSliders();
+        } catch (e) { /* ignore */ }
+      }
+      if (msg.startsWith('LVL:')) {
+        const [rms, peak, voice] = msg.slice(4).split(',');
+        $('liveRms').textContent = rms;
+        $('liveVoice').textContent = voice;
+        const pct = Math.min(100, (parseFloat(rms) / 10));
+        $('meterFill').style.width = pct + '%';
       }
     }
-  }
-});
 
-function pushValue(v){
+    function syncSliders() {
+      $('valY').textContent = $('limY').value;
+      $('valR').textContent = $('limR').value;
+      $('valVoz').textContent = $('voz').value;
+    }
 
-  chartData.shift();
-  chartData.push(v);
-
-  audioChart.data.datasets[0].data = [...chartData];
-
-  UI.liveValue.innerText = Math.round(v);
-
-  audioChart.update('none');
-}
-
-async function connectBLE(){
-
-  try{
-
-    bleDevice = await navigator.bluetooth.requestDevice({
-      acceptAllDevices:true,
-      optionalServices:[SERVICE_UUID]
+    ['limY','limR','voz'].forEach(id => {
+      $(id).addEventListener('input', syncSliders);
     });
 
-    const server = await bleDevice.gatt.connect();
+    $('btnConnect').onclick = async () => {
+      if (!navigator.bluetooth) {
+        alert('Web Bluetooth não disponível. Use Chrome/Edge em desktop ou Android.');
+        return;
+      }
+      try {
+        device = await navigator.bluetooth.requestDevice({
+          filters: [{ services: [SERVICE_UUID] }],
+          optionalServices: [SERVICE_UUID],
+        });
+        device.addEventListener('gattserverdisconnected', () => {
+          authenticated = false;
+          showPanels('connect');
+          setStatus(false, 'Desconectado');
+        });
+        server = await device.gatt.connect();
+        const svc = await server.getPrimaryService(SERVICE_UUID);
+        cmdChar = await svc.getCharacteristic(CHAR_CMD);
+        notifyChar = await svc.getCharacteristic(CHAR_NOTIFY);
+        await notifyChar.startNotifications();
+        notifyChar.addEventListener('characteristicvaluechanged', onNotify);
 
-    const service = await server.getPrimaryService(SERVICE_UUID);
+        setStatus(true, 'Conectado — informe o PIN');
+        showPanels('auth');
+        log('Conectado a ' + (device.name || 'ESP32'));
+      } catch (e) {
+        log('Erro: ' + e.message);
+        alert(e.message);
+      }
+    };
 
-    bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+    $('btnLogin').onclick = async () => {
+      const pin = $('pin').value;
+      if (!pin) return;
+      await writeCmd('LOGIN:' + pin);
+    };
 
-    await bleCharacteristic.startNotifications();
+    $('btnLimits').onclick = async () => {
+      await writeCmd(`LIMITES:${$('limY').value},${$('limR').value}`);
+    };
 
-    bleCharacteristic.addEventListener(
-      'characteristicvaluechanged',
-      handleNotification
-    );
+    $('btnVoz').onclick = async () => {
+      await writeCmd('VOZ:' + $('voz').value);
+    };
 
-    UI.statusText.innerText = "Conectado";
-    UI.statusDot.classList.add("on");
+    $('btnColor').onclick = async () => {
+      const hex = $('alertColor').value.replace('#','');
+      const r = parseInt(hex.slice(0,2),16);
+      const g = parseInt(hex.slice(2,4),16);
+      const b = parseInt(hex.slice(4,6),16);
+      await writeCmd(`CORES:${r},${g},${b}`);
+    };
 
-    UI.connBadge.innerText = "ONLINE";
-    UI.connBadge.className = "badge badge-on";
+    $('btnNome').onclick = async () => {
+      const n = $('nome').value.trim();
+      if (n) await writeCmd('NOME:' + n);
+    };
 
-    UI.btnConnect.innerText = "Desconectar";
+    $('btnSenha').onclick = async () => {
+      const s = $('novaSenha').value;
+      if (s.length >= 4) await writeCmd('ALTERARSENHA:' + s);
+      else alert('Mínimo 4 caracteres');
+    };
 
-    UI.authCard.classList.remove("hidden");
+    $('btnTouch').onclick = async () => {
+      await writeCmd($('touchOk').checked ? 'CONFIRMACAO:LIGADO' : 'CONFIRMACAO:DESLIGADO');
+    };
 
-    bleDevice.addEventListener('gattserverdisconnected', resetUI);
+    $('btnCalibrar').onclick = async () => {
+      await writeCmd('CALIBRAR:');
+    };
 
-  }catch(e){
+    $('btnExport').onclick = async () => {
+      await writeCmd('EXPORT:');
+    };
 
-    console.error(e);
+    $('btnImport').onclick = async () => {
+      let json = $('jsonBox').value.trim();
+      if (!json) {
+        $('jsonBox').classList.remove('hidden');
+        json = prompt('Cole o JSON de configuração:');
+        if (!json) return;
+      }
+      await writeCmd('IMPORT:' + json);
+    };
 
-    toast("Erro ao conectar");
-  }
-}
+    $('btnDisconnect').onclick = () => {
+      if (device?.gatt?.connected) device.gatt.disconnect();
+    };
 
-function resetUI(){
-
-  bleDevice = null;
-  bleCharacteristic = null;
-
-  UI.statusText.innerText = "Desconectado";
-
-  UI.statusDot.classList.remove("on");
-
-  UI.connBadge.innerText = "OFFLINE";
-  UI.connBadge.className = "badge badge-off";
-
-  UI.btnConnect.innerText = "Conectar";
-
-  UI.authCard.classList.add("hidden");
-  UI.chartCard.classList.add("hidden");
-  UI.configCard.classList.add("hidden");
-
-  isAuthenticated = false;
-}
-
-async function sendCommand(cmd){
-
-  if(!bleCharacteristic) return;
-
-  await bleCharacteristic.writeValue(
-    new TextEncoder().encode(cmd)
-  );
-}
-
-function handleNotification(event){
-
-  const raw = new TextDecoder().decode(event.target.value);
-
-  console.log("BLE:", raw);
-
-  // =========================
-  // DATA
-  // =========================
-  if(raw.startsWith("DATA:")){
-
-    const val = parseFloat(raw.substring(5));
-
-    if(!isNaN(val)){
-
-      pushValue(val);
-    }
-
-    return;
-  }
-
-  // =========================
-  // CONFIG
-  // =========================
-  if(raw.startsWith("CONFIG:")){
-
-    const parts = raw.substring(7).split(",");
-
-    UI.limitAmarelo.value = parts[0];
-    UI.limitVermelho.value = parts[1];
-
-    return;
-  }
-
-  // =========================
-  // LOGIN OK
-  // =========================
-  if(raw.startsWith("AUTH_OK")){
-
-    isAuthenticated = true;
-
-    UI.authBadge.innerText = "AUTENTICADO";
-    UI.authBadge.className = "badge badge-auth";
-
-    UI.chartCard.classList.remove("hidden");
-    UI.configCard.classList.remove("hidden");
-
-    toast("Autenticado");
-
-    return;
-  }
-
-  // =========================
-  // LOGIN FAIL
-  // =========================
-  if(raw.startsWith("AUTH_FAIL")){
-
-    toast("Senha incorreta");
-
-    return;
-  }
-}
-
-UI.btnConnect.addEventListener("click", ()=>{
-
-  if(bleDevice && bleDevice.gatt.connected){
-
-    bleDevice.gatt.disconnect();
-
-  }else{
-
-    connectBLE();
-  }
-});
-
-document.getElementById("btnLogin").addEventListener("click", async ()=>{
-
-  const pass = document.getElementById("password").value;
-
-  await sendCommand(`LOGIN:${pass}`);
-});
-
-document.getElementById("btnSalvar").addEventListener("click", async ()=>{
-
-  const a = UI.limitAmarelo.value;
-  const v = UI.limitVermelho.value;
-
-  await sendCommand(`LIMITES:${a},${v}`);
-
-  toast("Limites enviados");
-});
-</script>
-
+    showPanels('connect');
+    syncSliders();
+  </script>
 </body>
 </html>
